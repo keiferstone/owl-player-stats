@@ -1,6 +1,7 @@
 package com.keiferstone.owlplayerstats.ui.screen
 
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -18,12 +19,15 @@ fun PlayerGridScreen(viewModel: MainViewModel = hiltActivityViewModel()) {
     val players = viewModel.playerSummariesFlow.collectAsState().value
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(120.dp)
+        columns = GridCells.Adaptive(120.dp),
+        contentPadding = PaddingValues(4.dp)
     ) {
         items(players) { player ->
             PlayerItem(
                 player = player,
-                team = player.currentTeam?.let { viewModel.getTeamSummary(it) } )
+                team = player.currentTeam?.let { viewModel.getTeamSummary(it) } ) {
+                // TODO: Navigate to player details
+            }
         }
     }
 }

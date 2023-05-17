@@ -3,6 +3,7 @@ package com.keiferstone.owlplayerstats.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,7 @@ import com.keiferstone.data.model.TeamSummary
 import com.keiferstone.owlplayerstats.extension.parseHexColor
 
 @Composable
-fun PlayerItem(player: PlayerSummary, team: TeamSummary?) {
+fun PlayerItem(player: PlayerSummary, team: TeamSummary?, onClick: (PlayerSummary) -> Unit) {
     val bigNoodleFontFamily = remember {
         FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
     }
@@ -47,6 +48,8 @@ fun PlayerItem(player: PlayerSummary, team: TeamSummary?) {
             .padding(4.dp),
     ) {
         OutlinedCard(
+            modifier = Modifier
+                .clickable { onClick(player) },
             colors = CardDefaults.outlinedCardColors(containerColor = secondaryColor),
             border = BorderStroke(
                 width = 1.dp,
