@@ -3,7 +3,7 @@ package com.keiferstone.data.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Player(
+data class PlayerSummary(
     val id: Long,
     val name: String,
     val number: Long,

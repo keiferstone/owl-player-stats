@@ -3,7 +3,7 @@ package com.keiferstone.data.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Segment(
+data class SegmentSummary(
     val id: String,
     val name: String?,
     val competitionId: String,

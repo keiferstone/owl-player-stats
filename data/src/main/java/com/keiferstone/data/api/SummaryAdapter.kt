@@ -9,12 +9,13 @@ class SummaryAdapter {
     @FromJson
     fun fromJson(
         jsonReader: JsonReader,
-        playerJsonAdapter: JsonAdapter<Player>): Summary {
+        playerJsonAdapter: JsonAdapter<PlayerSummary>,
+        teamJsonAdapter: JsonAdapter<TeamSummary>): Summary {
 
-        val players = mutableListOf<Player>()
-        val teams = mutableListOf<Team>()
-        val matches = mutableListOf<Match>()
-        val segments = mutableListOf<Segment>()
+        val players = mutableListOf<PlayerSummary>()
+        val teams = mutableListOf<TeamSummary>()
+        val matches = mutableListOf<MatchSummary>()
+        val segments = mutableListOf<SegmentSummary>()
 
         jsonReader.beginObject()
         jsonReader.skipName()
@@ -33,10 +34,9 @@ class SummaryAdapter {
 
         while (jsonReader.hasNext()) {
             jsonReader.skipName()
-//            teamJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
-//                teams.add(it)
-//            }
-            jsonReader.skipValue()
+            teamJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
+                teams.add(it)
+            }
         }
 
         jsonReader.endObject()

@@ -14,20 +14,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType.Companion.Sp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import com.keiferstone.data.model.Team
+import com.keiferstone.data.model.TeamSummary
 import com.keiferstone.owlplayerstats.ui.shape.RightSlantRectangle
 import com.keiferstone.owlplayerstats.R
 
 @Composable
-fun TeamItem(team: Team, onClick: () -> Unit = {}) {
+fun TeamItem(team: TeamSummary, onClick: () -> Unit = {}) {
     val bigNoodleFontFamily = remember {
         FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
     }
