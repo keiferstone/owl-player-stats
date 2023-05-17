@@ -9,10 +9,7 @@ class SummaryAdapter {
     @FromJson
     fun fromJson(
         jsonReader: JsonReader,
-        playerJsonAdapter: JsonAdapter<Player>,
-        teamJsonAdapter: JsonAdapter<Team>,
-        matchJsonAdapter: JsonAdapter<Match>,
-        segmentJsonAdapter: JsonAdapter<Segment>): Summary {
+        playerJsonAdapter: JsonAdapter<Player>): Summary {
 
         val players = mutableListOf<Player>()
         val teams = mutableListOf<Team>()
@@ -36,9 +33,10 @@ class SummaryAdapter {
 
         while (jsonReader.hasNext()) {
             jsonReader.skipName()
-            teamJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
-                teams.add(it)
-            }
+//            teamJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
+//                teams.add(it)
+//            }
+            jsonReader.skipValue()
         }
 
         jsonReader.endObject()
@@ -47,9 +45,10 @@ class SummaryAdapter {
 
         while (jsonReader.hasNext()) {
             jsonReader.skipName()
-            matchJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
-                matches.add(it)
-            }
+//            matchJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
+//                matches.add(it)
+//            }
+            jsonReader.skipValue()
         }
 
         jsonReader.endObject()
@@ -58,18 +57,17 @@ class SummaryAdapter {
 
         while (jsonReader.hasNext()) {
             jsonReader.skipName()
-            segmentJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
-                segments.add(it)
-            }
+//            segmentJsonAdapter.fromJson(jsonReader.nextSource().readUtf8())?.let {
+//                segments.add(it)
+//            }
+            jsonReader.skipValue()
         }
 
         jsonReader.endObject()
         jsonReader.skipName()
-        jsonReader.beginArray()
-        jsonReader.endArray()
+        jsonReader.skipValue()
         jsonReader.skipName()
-        jsonReader.beginArray()
-        jsonReader.endArray()
+        jsonReader.skipValue()
         jsonReader.endObject()
 
         return Summary(

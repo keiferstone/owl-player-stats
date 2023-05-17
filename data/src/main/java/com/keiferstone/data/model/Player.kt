@@ -7,7 +7,7 @@ data class Player(
     val id: Long,
     val name: String,
     val number: Long,
-    val role: String,
+    val role: String?,
     val preferredSlot: Long,
     val currentTeam: Long?,
     val givenName: String,
