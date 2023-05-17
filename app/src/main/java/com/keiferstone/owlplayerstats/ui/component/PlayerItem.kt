@@ -81,7 +81,7 @@ fun PlayerItem(player: PlayerSummary, team: TeamSummary?, onClick: (PlayerSummar
                             bottom = 8.dp),
                     text = player.name,
                     color = primaryColor,
-                    fontSize = 30.sp,
+                    fontSize = 28.sp,
                     fontFamily = bigNoodleFontFamily
                 )
             }
