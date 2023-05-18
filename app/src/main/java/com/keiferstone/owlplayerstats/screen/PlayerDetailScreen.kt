@@ -50,11 +50,10 @@ fun PlayerDetailScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = secondaryColor)
                 ) {
                     Box(
                         modifier = Modifier
-                            .background(color = Color.LightGray)
+                            .background(color = secondaryColor)
                     ) {
                         AsyncImage(
                             modifier = Modifier
@@ -69,14 +68,8 @@ fun PlayerDetailScreen(
                     }
                     Text(
                         modifier = Modifier
-                            .padding(
-                                start = 8.dp,
-                                end = 8.dp,
-                                top = 2.dp,
-                                bottom = 8.dp
-                            ),
+                            .padding(16.dp),
                         text = player.name,
-                        color = primaryColor,
                         fontSize = 50.sp,
                         fontFamily = bigNoodleFontFamily
                     )
