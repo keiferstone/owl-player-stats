@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.ui.component
+package com.keiferstone.owlplayerstats.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,7 +20,7 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.keiferstone.data.model.TeamSummary
-import com.keiferstone.owlplayerstats.ui.shape.RightSlantRectangle
+import com.keiferstone.owlplayerstats.shape.RightSlantRectangle
 import com.keiferstone.owlplayerstats.R
 
 @Composable

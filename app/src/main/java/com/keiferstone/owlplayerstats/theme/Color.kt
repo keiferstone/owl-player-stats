@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.ui.theme
+package com.keiferstone.owlplayerstats.theme
 
 import androidx.compose.ui.graphics.Color
 

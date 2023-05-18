@@ -3,16 +3,12 @@ package com.keiferstone.owlplayerstats.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import com.keiferstone.owlplayerstats.ui.screen.PlayerGridScreen
-import com.keiferstone.owlplayerstats.ui.theme.OwlPlayerStatsTheme
-import com.keiferstone.owlplayerstats.vm.MainViewModel
+import com.keiferstone.owlplayerstats.screen.PlayerGridScreen
+import com.keiferstone.owlplayerstats.theme.OwlPlayerStatsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel by viewModels<MainViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -20,7 +16,5 @@ class MainActivity : ComponentActivity() {
                 PlayerGridScreen()
             }
         }
-
-        viewModel.getSummary()
     }
 }

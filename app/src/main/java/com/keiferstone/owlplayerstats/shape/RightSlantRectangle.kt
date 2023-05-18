@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.ui.shape
+package com.keiferstone.owlplayerstats.shape
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
