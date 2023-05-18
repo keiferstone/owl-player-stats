@@ -39,7 +39,7 @@ class OwlPlayerStatsRepository @Inject constructor(private val client: OwlPlayer
                     playerId = playerId) // TODO: Localization
             }
         }.getOrElse {
-            Log.e("ops", "Error getting summary: $it", it)
+            Log.e("ops", "Error getting player $playerId: $it", it)
             null
         }
     }

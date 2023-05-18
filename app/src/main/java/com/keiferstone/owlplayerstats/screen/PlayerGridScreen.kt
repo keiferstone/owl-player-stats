@@ -8,8 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,21 +21,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.composable.hiltActivityViewModel
 import com.keiferstone.owlplayerstats.component.PlayerItem
-import com.keiferstone.owlplayerstats.state.PlayerDetailState
 import com.keiferstone.owlplayerstats.state.PlayerGridState
-import com.keiferstone.owlplayerstats.theme.OwlPlayerStatsTheme
 import com.keiferstone.owlplayerstats.vm.PlayerGridViewModel
 
 @Composable
-fun PlayerGridScreen(viewModel: PlayerGridViewModel = hiltActivityViewModel()) {
-    val uiState = viewModel.uiState.collectAsState().value
+fun PlayerGridScreen(
+    viewModel: PlayerGridViewModel = hiltViewModel(),
+    onPlayerSelected: (PlayerSummary) -> Unit) {
 
     var searchQuery by remember { mutableStateOf("") }
 
-    when (uiState) {
+    when (val uiState = viewModel.uiState.collectAsState().value) {
         is PlayerGridState.Loading -> Unit // TODO
         is PlayerGridState.Content -> {
             Column {
@@ -64,7 +65,7 @@ fun PlayerGridScreen(viewModel: PlayerGridViewModel = hiltActivityViewModel()) {
                         PlayerItem(
                             player = playerDatum.player,
                             team = playerDatum.team) {
-                            // TODO: Navigate to player details
+                            onPlayerSelected(it)
                         }
                     }
                 }
@@ -77,7 +78,7 @@ fun PlayerGridScreen(viewModel: PlayerGridViewModel = hiltActivityViewModel()) {
 @Preview(showBackground = true)
 @Composable
 fun PlayerGridScreenPreview() {
-    OwlPlayerStatsTheme {
-        PlayerGridScreen()
+    MaterialTheme {
+        PlayerGridScreen {}
     }
 }
