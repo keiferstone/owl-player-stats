@@ -1,14 +1,21 @@
 package com.keiferstone.owlplayerstats.screen
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,10 +57,12 @@ fun PlayerDetailScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(color = secondaryColor)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Box(
                         modifier = Modifier
-                            .background(color = secondaryColor)
+                            .background(color = Color.LightGray)
                     ) {
                         AsyncImage(
                             modifier = Modifier
@@ -70,13 +79,129 @@ fun PlayerDetailScreen(
                         modifier = Modifier
                             .padding(16.dp),
                         text = player.name,
-                        fontSize = 50.sp,
+                        color = primaryColor,
+                        fontSize = 56.sp,
                         fontFamily = bigNoodleFontFamily
                     )
+                    OutlinedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = primaryColor),
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+                            text = "All-time stats",
+                            fontSize = 28.sp,
+                            fontFamily = bigNoodleFontFamily,
+                        )
+                        StatRow(
+                            name = "Damage done",
+                            value = player.stats.heroDamageDone)
+                        StatRow(
+                            name = "Healing done",
+                            value = player.stats.healingDone)
+                        StatRow(
+                            name = "Damage taken",
+                            value = player.stats.damageTaken)
+                        StatRow(
+                            name = "Final blows",
+                            value = player.stats.finalBlows)
+                        StatRow(
+                            name = "Eliminations",
+                            value = player.stats.eliminations)
+                        StatRow(
+                            name = "Deaths",
+                            value = player.stats.deaths)
+                        StatRow(
+                            name = "Time spent on fire",
+                            value = player.stats.timeSpentOnFire)
+                        StatRow(
+                            name = "Solo kills",
+                            value = player.stats.soloKills)
+                        StatRow(
+                            name = "Ultimates used",
+                            value = player.stats.ultsUsed)
+                        StatRow(
+                            name = "Ultimates Earned",
+                            value = player.stats.ultsEarned)
+                        StatRow(
+                            name = "Time played",
+                            value = player.stats.timePlayed)
+                        StatRow(
+                            name = "Dragonstrike kills",
+                            value = player.stats.dragonstrikeKills)
+                        StatRow(
+                            name = "Players teleported",
+                            value = player.stats.playersTeleported)
+                        StatRow(
+                            name = "Critical hits",
+                            value = player.stats.criticalHits)
+                        StatRow(
+                            name = "Shots hit",
+                            value = player.stats.shotsHit)
+                        StatRow(
+                            name = "Enemies hacked",
+                            value = player.stats.heroDamageDone)
+                        StatRow(
+                            name = "Enemies EMPd",
+                            value = player.stats.enemiesEMPd)
+                        StatRow(
+                            name = "Storm arrow kills",
+                            value = player.stats.stormArrowKills)
+                        StatRow(
+                            name = "Scoped hits",
+                            value = player.stats.scopedHits)
+                        StatRow(
+                            name = "Bob kills",
+                            value = player.stats.scopedCriticalHits)
+                        StatRow(
+                            name = "Scoped critical hits",
+                            value = player.stats.bobKills)
+                        StatRow(
+                            name = "Scoped critical hit kills",
+                            value = player.stats.scopedCriticalHitKills)
+                        StatRow(
+                            name = "Charged shot kills",
+                            value = player.stats.chargedShotKills)
+                        StatRow(
+                            name = "Knockback kills",
+                            value = player.stats.knockbackKills)
+                        StatRow(
+                            name = "Deadeye kills",
+                            value = player.stats.deadeyeKills)
+                        StatRow(
+                            name = "Overclock kills",
+                            value = player.stats.overclockKills)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
         }
         is PlayerDetailState.Error -> Unit // TODO
+    }
+}
+
+@Composable
+fun StatRow(name: String, value: Long?) {
+    Row {
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            text = name,
+            fontSize = 13.sp
+        )
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            text = value?.let { "%,d".format(it) } ?: "??",
+            fontSize = 14.sp
+        )
     }
 }
 

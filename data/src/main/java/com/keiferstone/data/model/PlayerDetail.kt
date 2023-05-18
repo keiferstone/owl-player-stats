@@ -13,6 +13,7 @@ data class PlayerDetail(
     val givenName: String,
     val familyName: String,
     val headshotUrl: String?,
-    val teams: List<PlayerDetailTeam>) {
+    val teams: List<PlayerDetailTeam>,
+    val stats: PlayerDetailStats) {
     val currentTeam: PlayerDetailTeam? = teams.find { it.id == currentTeams.firstOrNull() }
 }
