@@ -2,12 +2,13 @@ package com.keiferstone.owlplayerstats.component
 
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,10 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -34,8 +33,14 @@ import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.TeamSummary
 import com.keiferstone.owlplayerstats.extension.parseHexColor
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PlayerItem(player: PlayerSummary, team: TeamSummary?, onClick: (PlayerSummary) -> Unit) {
+fun PlayerItem(
+    player: PlayerSummary,
+    team: TeamSummary?,
+    selected: Boolean = false,
+    onPlayerClick: (PlayerSummary) -> Unit = {},
+    onPlayerLongClick: (PlayerSummary) -> Unit = {}) {
     val bigNoodleFontFamily = remember {
         FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
     }
@@ -43,16 +48,19 @@ fun PlayerItem(player: PlayerSummary, team: TeamSummary?, onClick: (PlayerSummar
     val primaryColor = team?.primaryColor?.parseHexColor()?.let { Color(it) } ?: Color.Black
     val secondaryColor = team?.secondaryColor?.parseHexColor()?.let { Color(it) } ?: Color.White
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .padding(4.dp),
     ) {
         OutlinedCard(
             modifier = Modifier
-                .clickable { onClick(player) },
+                .combinedClickable(
+                    onClick = { onPlayerClick(player) },
+                    onLongClick = { onPlayerLongClick(player) }
+                ),
             colors = CardDefaults.outlinedCardColors(containerColor = secondaryColor),
             border = BorderStroke(
-                width = 1.dp,
+                width = if (selected) 2.dp else 1.dp,
                 color = primaryColor),
         ) {
             Column(
@@ -85,6 +93,15 @@ fun PlayerItem(player: PlayerSummary, team: TeamSummary?, onClick: (PlayerSummar
                     fontFamily = bigNoodleFontFamily
                 )
             }
+        }
+        if (selected) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        color = secondaryColor.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(16.dp)
+                    ))
         }
     }
 }

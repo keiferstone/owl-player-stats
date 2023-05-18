@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -34,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.keiferstone.owlplayerstats.R
+import com.keiferstone.owlplayerstats.component.StatRow
 import com.keiferstone.owlplayerstats.extension.parseHexColor
 import com.keiferstone.owlplayerstats.state.PlayerDetailState
 import com.keiferstone.owlplayerstats.vm.PlayerDetailViewModel
@@ -50,7 +49,7 @@ fun PlayerDetailScreen(
     when (val uiState = viewModel.uiState.collectAsState().value) {
         is PlayerDetailState.Loading -> Unit // TODO
         is PlayerDetailState.Content -> {
-            uiState.playerDetail.let { player ->
+            uiState.player.let { player ->
                 val primaryColor = player.currentTeam?.primaryColor?.parseHexColor()?.let { Color(it) } ?: Color.Black
                 val secondaryColor = player.currentTeam?.secondaryColor?.parseHexColor()?.let { Color(it) } ?: Color.White
 
@@ -86,7 +85,7 @@ fun PlayerDetailScreen(
                     OutlinedCard(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                         border = BorderStroke(
                             width = 1.dp,
                             color = primaryColor),
@@ -126,7 +125,7 @@ fun PlayerDetailScreen(
                             name = "Ultimates used",
                             value = player.stats.ultsUsed)
                         StatRow(
-                            name = "Ultimates Earned",
+                            name = "Ultimates earned",
                             value = player.stats.ultsEarned)
                         StatRow(
                             name = "Time played",
@@ -182,26 +181,6 @@ fun PlayerDetailScreen(
             }
         }
         is PlayerDetailState.Error -> Unit // TODO
-    }
-}
-
-@Composable
-fun StatRow(name: String, value: Long?) {
-    Row {
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp, vertical = 4.dp),
-            text = name,
-            fontSize = 13.sp
-        )
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp, vertical = 4.dp),
-            text = value?.let { "%,d".format(it) } ?: "??",
-            fontSize = 14.sp
-        )
     }
 }
 
