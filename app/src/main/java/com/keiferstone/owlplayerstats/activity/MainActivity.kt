@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.keiferstone.owlplayerstats.ui.screen.PlayerComparisonScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerDetailScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerGridScreen
+import com.keiferstone.owlplayerstats.ui.screen.StatListScreen
 import com.keiferstone.owlplayerstats.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,10 @@ class MainActivity : ComponentActivity() {
                             },
                             onPlayerPairSelected = { first, second ->
                                 navController.navigate("player-comparison/${first.id}/${second.id}")
-                            }
+                            },
+                            onStatsSelected = {
+                                navController.navigate("stats-list")
+                            },
                         )
                     }
                     composable(
@@ -53,6 +57,10 @@ class MainActivity : ComponentActivity() {
                         if (player1Id != null && player2Id != null) {
                             PlayerComparisonScreen(player1Id, player2Id)
                         }
+                    }
+                    composable(
+                        route = "stats-list") {
+                        StatListScreen()
                     }
                 }
             }

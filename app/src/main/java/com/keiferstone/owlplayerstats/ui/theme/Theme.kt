@@ -2,9 +2,16 @@ package com.keiferstone.owlplayerstats.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.keiferstone.owlplayerstats.R
 
 
 private val LightColors = lightColorScheme(
@@ -74,17 +81,39 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun AppTheme(
-  useDarkTheme: Boolean = isSystemInDarkTheme(),
-  content: @Composable() () -> Unit
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
 ) {
-  val colors = if (!useDarkTheme) {
-    LightColors
-  } else {
-    DarkColors
-  }
+    val colors = if (!useDarkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
 
-  MaterialTheme(
-    colorScheme = colors,
-    content = content
-  )
+    val typography = MaterialTheme.typography.copy(
+        displayLarge = MaterialTheme.typography.displayLarge.copy(
+            fontFamily = FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
+        ),
+        displayMedium = MaterialTheme.typography.displayMedium.copy(
+            fontFamily = FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
+        ),
+        displaySmall = MaterialTheme.typography.displaySmall.copy(
+            fontFamily = FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
+        ),
+        headlineLarge = MaterialTheme.typography.headlineLarge.copy(
+            fontFamily = FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
+        ),
+        headlineMedium = MaterialTheme.typography.headlineMedium.copy(
+            fontFamily = FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
+        ),
+        headlineSmall = MaterialTheme.typography.headlineSmall.copy(
+            fontFamily = FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
+        )
+    )
+
+    MaterialTheme(
+        colorScheme = colors,
+        typography = typography,
+        content = content
+    )
 }

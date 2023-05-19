@@ -1,0 +1,34 @@
+package com.keiferstone.data.model
+
+enum class StatType {
+    DAMAGE_DONE,
+    HEALING_DONE,
+    DAMAGE_TAKEN,
+    FINAL_BLOWS,
+    ELIMINATIONS,
+    DEATHS,
+    TIME_SPENT_ON_FIRE,
+    SOLO_KILLS,
+    ULTS_USED,
+    ULTS_EARNED,
+    TIME_PLAYED,
+    DRAGONSTRIKE_KILLS,
+    PLAYERS_TELEPORTED,
+    CRITICAL_HITS,
+    SHOTS_HIT,
+    ENEMIES_HACKED,
+    ENEMIES_EMPD,
+    STORM_ARROW_KILLS,
+    SCOPED_HITS,
+    SCOPED_CRITICAL_HITS,
+    BOB_KILLS,
+    SCOPED_CRITICAL_HIT_KILLS,
+    CHARGED_SHOT_KILLS,
+    KNOCKBACK_KILLS,
+    DEADEYE_KILLS,
+    OVERCLOCK_KILLS;
+
+    companion object {
+        fun allStatTypes() = StatType.values().toList()
+    }
+}

@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun StatRow(name: String, value: Long?) {
+fun PlayerStatRow(name: String, value: Long?) {
     Row {
         Text(
             modifier = Modifier

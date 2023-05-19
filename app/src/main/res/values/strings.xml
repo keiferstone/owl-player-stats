@@ -9,4 +9,32 @@
     <string name="tank">Tank</string>
     <string name="dps">Dps</string>
     <string name="support">Support</string>
+
+    <string name="stats_per_ten">Stats per 10 minutes</string>
+    <string name="damage_done">Damage done</string>
+    <string name="healing_done">Healing done</string>
+    <string name="damage_taken">Damage take </string>
+    <string name="final_blows">Final blows</string>
+    <string name="eliminations">Eliminations</string>
+    <string name="deaths">Deaths</string>
+    <string name="time_spent_on_fire">Time spent on fire</string>
+    <string name="solo_kills">Solo kills</string>
+    <string name="ults_used">Ultimates used</string>
+    <string name="ults_earned">Ultimates earned</string>
+    <string name="time_played">Time played</string>
+    <string name="dragonstrike_kills">Dragonstrike kills</string>
+    <string name="players_teleported">Players teleported</string>
+    <string name="critical_hits">Critical hits</string>
+    <string name="shots_hit">Shots hit</string>
+    <string name="enemies_hacked">Enemies hacked</string>
+    <string name="enemies_empd">Enemies EMPd</string>
+    <string name="storm_arrow_kills">Storm arrow kills</string>
+    <string name="scoped_hits">Scoped hits</string>
+    <string name="scoped_critical_hits">Scoped critical hits</string>
+    <string name="bob_kills">Bob kills</string>
+    <string name="scoped_critical_hit_kills">Scoped critical hit kills</string>
+    <string name="charged_shot_kills">Charged shot kills</string>
+    <string name="knockback_kills">Knockback kills</string>
+    <string name="deadeye_kills">Deadeye kills</string>
+    <string name="overclock_kills">Overclock kills</string>
 </resources>

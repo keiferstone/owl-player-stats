@@ -17,22 +17,21 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.ui.component.StatRow
+import com.keiferstone.owlplayerstats.extension.extractValue
+import com.keiferstone.owlplayerstats.extension.nameResId
+import com.keiferstone.owlplayerstats.ui.component.PlayerStatRow
 import com.keiferstone.owlplayerstats.extension.parseHexColor
 import com.keiferstone.owlplayerstats.state.PlayerDetailState
 import com.keiferstone.owlplayerstats.vm.PlayerDetailViewModel
@@ -42,9 +41,6 @@ fun PlayerDetailScreen(
     playerId: Long,
     viewModel: PlayerDetailViewModel = hiltViewModel()) {
     viewModel.loadPlayer(playerId)
-    val bigNoodleFontFamily = remember {
-        FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
-    }
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
         is PlayerDetailState.Loading -> Unit // TODO
@@ -79,8 +75,7 @@ fun PlayerDetailScreen(
                             .padding(16.dp),
                         text = player.name,
                         color = primaryColor,
-                        fontSize = 56.sp,
-                        fontFamily = bigNoodleFontFamily
+                        style = MaterialTheme.typography.displayLarge
                     )
                     OutlinedCard(
                         modifier = Modifier
@@ -93,88 +88,14 @@ fun PlayerDetailScreen(
                         Text(
                             modifier = Modifier
                                 .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-                            text = "All-time stats",
-                            fontSize = 28.sp,
-                            fontFamily = bigNoodleFontFamily,
+                            text = stringResource(R.string.stats_per_ten),
+                            style = MaterialTheme.typography.headlineMedium
                         )
-                        StatRow(
-                            name = "Damage done",
-                            value = player.stats.heroDamageDone)
-                        StatRow(
-                            name = "Healing done",
-                            value = player.stats.healingDone)
-                        StatRow(
-                            name = "Damage taken",
-                            value = player.stats.damageTaken)
-                        StatRow(
-                            name = "Final blows",
-                            value = player.stats.finalBlows)
-                        StatRow(
-                            name = "Eliminations",
-                            value = player.stats.eliminations)
-                        StatRow(
-                            name = "Deaths",
-                            value = player.stats.deaths)
-                        StatRow(
-                            name = "Time spent on fire",
-                            value = player.stats.timeSpentOnFire)
-                        StatRow(
-                            name = "Solo kills",
-                            value = player.stats.soloKills)
-                        StatRow(
-                            name = "Ultimates used",
-                            value = player.stats.ultsUsed)
-                        StatRow(
-                            name = "Ultimates earned",
-                            value = player.stats.ultsEarned)
-                        StatRow(
-                            name = "Time played",
-                            value = player.stats.timePlayed)
-                        StatRow(
-                            name = "Dragonstrike kills",
-                            value = player.stats.dragonstrikeKills)
-                        StatRow(
-                            name = "Players teleported",
-                            value = player.stats.playersTeleported)
-                        StatRow(
-                            name = "Critical hits",
-                            value = player.stats.criticalHits)
-                        StatRow(
-                            name = "Shots hit",
-                            value = player.stats.shotsHit)
-                        StatRow(
-                            name = "Enemies hacked",
-                            value = player.stats.heroDamageDone)
-                        StatRow(
-                            name = "Enemies EMPd",
-                            value = player.stats.enemiesEMPd)
-                        StatRow(
-                            name = "Storm arrow kills",
-                            value = player.stats.stormArrowKills)
-                        StatRow(
-                            name = "Scoped hits",
-                            value = player.stats.scopedHits)
-                        StatRow(
-                            name = "Bob kills",
-                            value = player.stats.scopedCriticalHits)
-                        StatRow(
-                            name = "Scoped critical hits",
-                            value = player.stats.bobKills)
-                        StatRow(
-                            name = "Scoped critical hit kills",
-                            value = player.stats.scopedCriticalHitKills)
-                        StatRow(
-                            name = "Charged shot kills",
-                            value = player.stats.chargedShotKills)
-                        StatRow(
-                            name = "Knockback kills",
-                            value = player.stats.knockbackKills)
-                        StatRow(
-                            name = "Deadeye kills",
-                            value = player.stats.deadeyeKills)
-                        StatRow(
-                            name = "Overclock kills",
-                            value = player.stats.overclockKills)
+                        StatType.allStatTypes().forEach {
+                            PlayerStatRow(
+                                name = stringResource(it.nameResId()),
+                                value = player.stats.extractValue(it))
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }

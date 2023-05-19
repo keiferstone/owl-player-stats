@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun StatComparisonRow(name: String, value1: Long?, value2: Long?) {
+fun PlayerStatComparisonRow(name: String, value1: Long?, value2: Long?) {
     Row {
         Text(
             modifier = Modifier

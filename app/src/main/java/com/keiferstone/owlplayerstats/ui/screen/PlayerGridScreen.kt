@@ -1,18 +1,22 @@
 package com.keiferstone.owlplayerstats.ui.screen
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -25,7 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +48,8 @@ import com.keiferstone.owlplayerstats.vm.PlayerGridViewModel
 fun PlayerGridScreen(
     viewModel: PlayerGridViewModel = hiltViewModel(),
     onPlayerSelected: (PlayerSummary) -> Unit = {},
-    onPlayerPairSelected: (PlayerSummary, PlayerSummary) -> Unit = { _, _ -> }) {
+    onPlayerPairSelected: (PlayerSummary, PlayerSummary) -> Unit = { _, _ -> },
+    onStatsSelected: () -> Unit = {}) {
 
     val selectedFilters = remember { mutableStateListOf<PlayerFilter>() }
     var searchQuery by remember { mutableStateOf("") }
@@ -52,17 +59,31 @@ fun PlayerGridScreen(
         is PlayerGridState.Loading -> Unit // TODO
         is PlayerGridState.Content -> {
             Column {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
-                    value = searchQuery,
-                    onValueChange = {
-                        searchQuery = it
-                    },
-                    label = {
-                        Text(stringResource(R.string.search))
-                    })
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp),
+                        value = searchQuery,
+                        onValueChange = {
+                            searchQuery = it
+                        },
+                        label = {
+                            Text(stringResource(R.string.search))
+                        })
+                    IconButton(
+                        onClick = { onStatsSelected() },
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .align(Alignment.CenterVertically)) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_rounded_outlined_leaderboard_24),
+                            contentDescription = "Stats",
+                        )
+                    }
+                }
                 FlowRow(
                     modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 0.dp)
                 ) {
