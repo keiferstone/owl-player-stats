@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.StatType
 import com.keiferstone.data.repository.OwlPlayerStatsRepository
+import com.keiferstone.owlplayerstats.extension.extractValue
 import com.keiferstone.owlplayerstats.extension.nameResId
 import com.keiferstone.owlplayerstats.state.StatLeaderDatum
 import com.keiferstone.owlplayerstats.state.StatListState
@@ -26,10 +27,11 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
                 repository.getSummary()?.let { summary ->
                     val playerDetails = summary.players.map { playerSummary ->
                         async { repository.getPlayer(playerSummary.id) }
-                    }.awaitAll()
+                    }.awaitAll().filterNotNull()
                     val data = StatType.allStatTypes().map { statType ->
-                        //StatLeaderDatum(statType.nameResId(), )
+                        StatLeaderDatum(statType.nameResId(), playerDetails.top5(statType))
                     }
+                    uiState.value = StatListState.Content(data)
                 } ?: run {
                     uiState.value = StatListState.Error()
                 }
@@ -39,7 +41,9 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
         }
     }
 
-    private fun List<PlayerDetail>.top5(statType: StatType) {
-
+    private fun List<PlayerDetail>.top5(statType: StatType): List<PlayerDetail> {
+        return sortedByDescending {
+            it.stats.extractValue(statType)
+        }.take(5)
     }
 }
