@@ -29,7 +29,7 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
                         async { repository.getPlayer(playerSummary.id) }
                     }.awaitAll().filterNotNull()
                     val data = StatType.allStatTypes().map { statType ->
-                        StatLeaderDatum(statType.nameResId(), playerDetails.top5(statType))
+                        StatLeaderDatum(statType, playerDetails.top5(statType))
                     }
                     uiState.value = StatListState.Content(data)
                 } ?: run {
