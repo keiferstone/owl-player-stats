@@ -4,4 +4,9 @@
     <string name="player_grid_title">Players</string>
     <string name="team_list_title">Teams</string>
     <string name="search">Search</string>
+    <string name="on_team">On team</string>
+    <string name="has_photo">Has photo</string>
+    <string name="tank">Tank</string>
+    <string name="dps">Dps</string>
+    <string name="support">Support</string>
 </resources>
