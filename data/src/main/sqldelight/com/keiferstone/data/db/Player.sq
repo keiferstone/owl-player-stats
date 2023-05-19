@@ -1,0 +1,89 @@
+import kotlin.collections.List;
+
+CREATE TABLE player (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    number INTEGER NOT NULL,
+    role TEXT,
+    preferred_slot INTEGER NOT NULL,
+    current_teams TEXT AS List<Long> NOT NULL,
+    given_name TEXT NOT NULL,
+    family_name TEXT NOT NULL,
+    headshot_url TEXT,
+    damage_done INTEGER,
+    healing_done INTEGER,
+    damage_taken INTEGER,
+    final_blows INTEGER,
+    eliminations INTEGER,
+    deaths INTEGER,
+    time_spent_on_fire INTEGER,
+    solo_kills INTEGER,
+    ults_used INTEGER,
+    ults_earned INTEGER,
+    time_played INTEGER,
+    dragonstrike_kills INTEGER,
+    players_teleported INTEGER,
+    critical_hits INTEGER,
+    shots_hit INTEGER,
+    enemies_hacked INTEGER,
+    enemies_empd INTEGER,
+    storm_arrow_kills INTEGER,
+    scoped_hits INTEGER,
+    scoped_critical_hits INTEGER,
+    bob_kills INTEGER,
+    scoped_critical_hit_kills INTEGER,
+    charged_shot_kills INTEGER,
+    knockback_kills INTEGER,
+    deadeye_kills INTEGER,
+    overclock_kills INTEGER,
+    team_ids TEXT AS List<Long> NOT NULL,
+    last_fetched_at INTEGER
+);
+
+selectAll:
+SELECT * FROM player;
+
+selectById:
+SELECT * FROM player WHERE id = ?;
+
+insert:
+INSERT OR REPLACE INTO player(
+id,
+name,
+number,
+role,
+preferred_slot,
+current_teams,
+given_name,
+family_name,
+headshot_url,
+damage_done,
+healing_done,
+damage_taken,
+final_blows,
+eliminations,
+deaths,
+time_spent_on_fire,
+solo_kills,
+ults_used,
+ults_earned,
+time_played,
+dragonstrike_kills,
+players_teleported,
+critical_hits,
+shots_hit,
+enemies_hacked,
+enemies_empd,
+storm_arrow_kills,
+scoped_hits,
+scoped_critical_hits,
+bob_kills,
+scoped_critical_hit_kills,
+charged_shot_kills,
+knockback_kills,
+deadeye_kills,
+overclock_kills,
+team_ids,
+last_fetched_at
+)
+VALUES ?;

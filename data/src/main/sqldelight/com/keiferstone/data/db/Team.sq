@@ -1,0 +1,26 @@
+CREATE TABLE team (
+    id INTEGER PRIMARY KEY,
+    code TEXT,
+    name TEXT,
+    logo TEXT,
+    icon TEXT,
+    primary_color TEXT,
+    secondary_color TEXT
+);
+
+selectAll:
+SELECT * FROM team;
+
+selectByIds:
+SELECT * FROM team WHERE id IN ?;
+
+insert:
+INSERT OR REPLACE INTO team(
+id,
+name,
+logo,
+icon,
+primary_color,
+secondary_color
+)
+VALUES ?;

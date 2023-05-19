@@ -2,14 +2,21 @@ package com.keiferstone.data.repository
 
 import android.util.Log
 import com.keiferstone.data.api.OwlPlayerStatsClient
+import com.keiferstone.data.extension.isStale
+import com.keiferstone.data.extension.toDbRow
+import com.keiferstone.data.extension.toPlayerDetail
+import com.keiferstone.data.extension.toPlayerDetailTeam
 import com.keiferstone.data.model.AccessToken
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.Summary
+import com.keiferstone.owlplayerstats.Database
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class OwlPlayerStatsRepository @Inject constructor(private val client: OwlPlayerStatsClient) {
+class OwlPlayerStatsRepository @Inject constructor(
+    private val client: OwlPlayerStatsClient,
+    private val database: Database) {
     private var accessToken: AccessToken? = null
 
     private suspend fun requireAccessToken(): AccessToken {
@@ -19,25 +26,52 @@ class OwlPlayerStatsRepository @Inject constructor(private val client: OwlPlayer
         return accessToken!!
     }
 
-    suspend fun getSummary(): Summary? {
+    suspend fun getSummary(forceRefresh: Boolean = false): Summary? {
         return runCatching {
-            requireAccessToken().let { accessToken ->
-                client.owlClient.getSummary(
-                    authorization = accessToken.toBearerString()) // TODO: Localization
-            }
+            client.owlClient.getSummary(
+                authorization = requireAccessToken().toBearerString()).also {
+                it.players.forEach {
+                    // TODO: database.playerQueries.insert()
+                }
+                it.teams.forEach { team ->
+                    database.teamQueries.insert(team.toDbRow())
+                }
+            } // TODO: Localization
         }.getOrElse {
             Log.e("ops", "Error getting summary: $it", it)
             null
         }
     }
 
-    suspend fun getPlayer(playerId: Long): PlayerDetail? {
+    suspend fun getPlayer(playerId: Long, forceRefresh: Boolean = false): PlayerDetail? {
+        Log.d("ops", "getPlayer($playerId, $forceRefresh)")
+
         return runCatching {
-            requireAccessToken().let { accessToken ->
+            var player = if (!forceRefresh) {
+                // Check cache
+                database.playerQueries.selectById(playerId).executeAsOneOrNull()?.let { cachedPlayer ->
+                    if (!cachedPlayer.isStale()) cachedPlayer.toPlayerDetail { teamIds ->
+                        database.teamQueries.selectByIds(teamIds).executeAsList().map { cachedTeam ->
+                            cachedTeam.toPlayerDetailTeam()
+                        }
+                    }
+                    else null
+                }
+            } else null
+            Log.d("ops", "cached player = $player")
+
+            player = if (forceRefresh || player == null) {
+                Log.d("ops", "refreshing player")
+                // Fetch from api
                 client.owlClient.getPlayer(
-                    authorization = accessToken.toBearerString(),
-                    playerId = playerId) // TODO: Localization
-            }
+                    authorization = requireAccessToken().toBearerString(),
+                    playerId = playerId
+                ).also {
+                    database.playerQueries.insert(it.toDbRow())
+                } // TODO: Localization
+            } else player
+            Log.d("ops", "player = $player")
+            return player
         }.getOrElse {
             Log.e("ops", "Error getting player $playerId: $it", it)
             null
