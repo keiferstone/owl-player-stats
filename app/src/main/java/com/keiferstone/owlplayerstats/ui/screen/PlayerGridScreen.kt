@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.screen
+package com.keiferstone.owlplayerstats.ui.screen
 
 
 import androidx.compose.foundation.layout.Box
@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.component.PlayerItem
+import com.keiferstone.owlplayerstats.ui.component.PlayerItem
 import com.keiferstone.owlplayerstats.state.PlayerFilter
 import com.keiferstone.owlplayerstats.state.PlayerGridState
 import com.keiferstone.owlplayerstats.vm.PlayerGridViewModel

@@ -9,9 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.keiferstone.owlplayerstats.screen.PlayerComparisonScreen
-import com.keiferstone.owlplayerstats.screen.PlayerDetailScreen
-import com.keiferstone.owlplayerstats.screen.PlayerGridScreen
+import com.keiferstone.owlplayerstats.ui.screen.PlayerComparisonScreen
+import com.keiferstone.owlplayerstats.ui.screen.PlayerDetailScreen
+import com.keiferstone.owlplayerstats.ui.screen.PlayerGridScreen
+import com.keiferstone.owlplayerstats.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            MaterialTheme {
+            AppTheme {
                 NavHost(
                     navController = navController,
                     startDestination = "player-grid") {

@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.component
+package com.keiferstone.owlplayerstats.ui.component
 
 
 import androidx.compose.foundation.BorderStroke

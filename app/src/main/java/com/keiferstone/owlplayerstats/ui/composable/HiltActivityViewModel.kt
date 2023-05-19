@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.composable
+package com.keiferstone.owlplayerstats.ui.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

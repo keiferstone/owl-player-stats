@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.screen
+package com.keiferstone.owlplayerstats.ui.screen
 
 
 import androidx.compose.foundation.BorderStroke
@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.component.StatRow
+import com.keiferstone.owlplayerstats.ui.component.StatRow
 import com.keiferstone.owlplayerstats.extension.parseHexColor
 import com.keiferstone.owlplayerstats.state.PlayerDetailState
 import com.keiferstone.owlplayerstats.vm.PlayerDetailViewModel

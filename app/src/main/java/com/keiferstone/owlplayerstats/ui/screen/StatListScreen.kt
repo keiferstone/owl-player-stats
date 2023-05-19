@@ -1,4 +1,4 @@
-package com.keiferstone.owlplayerstats.screen
+package com.keiferstone.owlplayerstats.ui.screen
 
 
 import androidx.compose.runtime.Composable
