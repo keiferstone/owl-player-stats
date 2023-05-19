@@ -63,8 +63,8 @@ fun PlayerComparisonScreen(
                     .fillMaxSize()
                     .background(brush = Brush.horizontalGradient(
                         0f to player1SecondaryColor,
-                        0.4f to player1SecondaryColor,
-                        0.6f to player2SecondaryColor,
+                        0.45f to player1SecondaryColor,
+                        0.55f to player2SecondaryColor,
                         1f to player2SecondaryColor
                     ))
                     .verticalScroll(rememberScrollState())
