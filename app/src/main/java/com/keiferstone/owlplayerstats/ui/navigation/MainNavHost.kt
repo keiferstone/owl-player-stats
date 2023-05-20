@@ -22,10 +22,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
 import com.keiferstone.owlplayerstats.ui.screen.PlayerComparisonScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerDetailScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerGridScreen
+import com.keiferstone.owlplayerstats.ui.screen.StatDetailScreen
 import com.keiferstone.owlplayerstats.ui.screen.StatListScreen
 import com.keiferstone.owlplayerstats.ui.theme.AppTheme
 
@@ -77,7 +79,16 @@ fun MainNavHost() {
                 startDestination = NavRoutes.STAT_LIST
             ) {
                 composable(route = NavRoutes.STAT_LIST) {
-                    StatListScreen()
+                    StatListScreen { statType ->
+                        navController.navigate("${NavRoutes.STAT_DETAIL}/${statType.name}")
+                    }
+                }
+                composable(
+                    route = "${NavRoutes.STAT_DETAIL}/{${NavArgs.STAT_TYPE}}",
+                    arguments = listOf(navArgument(NavArgs.STAT_TYPE) { type = NavType.StringType })) { backStackEntry ->
+                    backStackEntry.arguments?.getString(NavArgs.STAT_TYPE)?.let {
+                        StatDetailScreen(StatType.valueOf(it))
+                    }
                 }
                 composable(route = NavRoutes.PLAYER_GRID) {
                     PlayerGridScreen(

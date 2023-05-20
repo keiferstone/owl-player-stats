@@ -1,6 +1,8 @@
 package com.keiferstone.owlplayerstats.ui.component
 
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,12 +28,17 @@ import com.keiferstone.owlplayerstats.extension.formatStatValue
 import com.keiferstone.owlplayerstats.extension.nameResId
 
 @Composable
-fun StatLeadersRow(statType: StatType, leaders: List<PlayerDetail>) {
-    Row {
-        OutlinedCard(
+fun StatLeadersRow(statType: StatType, leaders: List<PlayerDetail>, onClick: (StatType) -> Unit) {
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .clickable {
+                    onClick(statType)
+                }
         ) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
