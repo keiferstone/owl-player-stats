@@ -29,7 +29,6 @@ android {
             firebaseAppDistribution {
                 artifactType="APK"
                 groups="testers"
-                serviceCredentialsFile="${System.getenv("owl_stats_service_credentials_file")}"
             }
         }
         release {
