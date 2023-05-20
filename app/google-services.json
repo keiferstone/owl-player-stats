@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "170256123570",
+    "project_id": "owl-stats-3f7fc",
+    "storage_bucket": "owl-stats-3f7fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170256123570:android:4e7e2d53665812553aebab",
+        "android_client_info": {
+          "package_name": "com.keiferstone.owlplayerstats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170256123570-vapme6s588pf453si3le6krt0lqc8a5o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2nYMbRrrBUKt_CACGL_EsoqJ9XPsLCXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170256123570-vapme6s588pf453si3le6krt0lqc8a5o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
