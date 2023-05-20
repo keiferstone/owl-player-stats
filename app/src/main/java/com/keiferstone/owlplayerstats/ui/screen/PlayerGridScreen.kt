@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.owlplayerstats.R
 import com.keiferstone.owlplayerstats.ui.component.PlayerItem
@@ -53,6 +54,7 @@ fun PlayerGridScreen(
     onPlayerSelected: (PlayerSummary) -> Unit = {},
     onPlayerPairSelected: (PlayerSummary, PlayerSummary) -> Unit = { _, _ -> }) {
 
+    val filters = remember { listOf(PlayerFilter.OnTeam, PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport) }
     val selectedFilters = remember { mutableStateListOf<PlayerFilter>() }
     var searchQuery by remember { mutableStateOf("") }
     var selectedPlayer by remember { mutableStateOf<PlayerSummary?>(null) }
@@ -88,7 +90,7 @@ fun PlayerGridScreen(
                 FlowRow(
                     modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 0.dp)
                 ) {
-                    uiState.filters.forEach { filter ->
+                    filters.forEach { filter ->
                         FilterChip(
                             selected = selectedFilters.contains(filter),
                             onClick = {

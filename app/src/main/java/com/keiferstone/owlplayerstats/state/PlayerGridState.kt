@@ -6,7 +6,7 @@ import com.keiferstone.data.model.TeamSummary
 
 sealed class PlayerGridState {
     object Loading : PlayerGridState()
-    data class Content(val filters: List<PlayerFilter>, val data: List<PlayerDatum>) : PlayerGridState()
+    data class Content(val data: List<PlayerDatum>) : PlayerGridState()
     data class Error(val message: String? = null) : PlayerGridState()
 }
 

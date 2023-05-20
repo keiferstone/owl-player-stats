@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.keiferstone.owlplayerstats.extension.formatStatValue
 
 @Composable
 fun PlayerStatRow(name: String, value: Long?) {
@@ -22,7 +23,7 @@ fun PlayerStatRow(name: String, value: Long?) {
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            text = value?.let { "%,d".format(it) } ?: "??",
+            text = value.formatStatValue(),
             fontSize = 14.sp
         )
     }

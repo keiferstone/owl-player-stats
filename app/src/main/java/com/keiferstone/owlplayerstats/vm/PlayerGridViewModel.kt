@@ -21,33 +21,15 @@ class PlayerGridViewModel @Inject constructor(private val repository: OwlPlayerS
     init {
         viewModelScope.launch {
             runCatching {
-                repository.getSummary()?.let { summary ->
+                repository.getSummary().let { summary ->
                     uiState.value = PlayerGridState.Content(
-                        filters = filters(summary),
                         data = summary.players.map { playerSummary ->
                             PlayerDatum(playerSummary, summary.teams.find { it.id == playerSummary.currentTeam })
                         })
-                } ?: run {
-                    uiState.value = PlayerGridState.Error()
                 }
             }.getOrElse {
                 uiState.value = PlayerGridState.Error(it.message)
             }
-        }
-    }
-
-    private fun filters(summary: Summary) = buildList {
-        if (summary.players.any { it.currentTeam != null }) {
-            add(PlayerFilter.OnTeam)
-        }
-        if (summary.players.any { it.role == PlayerRoles.TANK } ) {
-            add(PlayerFilter.PlaysTank)
-        }
-        if (summary.players.any { it.role == PlayerRoles.DPS } ) {
-            add(PlayerFilter.PlaysDps)
-        }
-        if (summary.players.any { it.role == PlayerRoles.SUPPORT } ) {
-            add(PlayerFilter.PlaysSupport)
         }
     }
 }

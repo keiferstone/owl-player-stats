@@ -9,6 +9,9 @@
     <string name="dps">Dps</string>
     <string name="support">Support</string>
     <string name="stats">Stats</string>
+    <string name="player">Player</string>
+    <string name="per_ten">Per 10</string>
+    <string name="total">Total</string>
     <string name="stats_per_ten">Stats per 10 minutes</string>
     <string name="damage_done">Damage done</string>
     <string name="healing_done">Healing done</string>

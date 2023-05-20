@@ -14,12 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.keiferstone.data.db.Player
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.StatType
+import com.keiferstone.owlplayerstats.R
 import com.keiferstone.owlplayerstats.extension.extractValue
+import com.keiferstone.owlplayerstats.extension.formatStatValue
 import com.keiferstone.owlplayerstats.extension.nameResId
 
 @Composable
@@ -43,7 +46,7 @@ fun StatLeadersRow(statType: StatType, leaders: List<PlayerDetail>) {
                     modifier = Modifier
                         .weight(2f)
                         .padding(horizontal = 2.dp),
-                    text = "Player",
+                    text = stringResource(R.string.player),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -51,7 +54,7 @@ fun StatLeadersRow(statType: StatType, leaders: List<PlayerDetail>) {
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 2.dp),
-                    text = "Per 10",
+                    text = stringResource(R.string.per_ten),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -59,7 +62,7 @@ fun StatLeadersRow(statType: StatType, leaders: List<PlayerDetail>) {
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 2.dp),
-                    text = "Total",
+                    text = stringResource(R.string.total),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -79,20 +82,24 @@ fun StatLeadersRow(statType: StatType, leaders: List<PlayerDetail>) {
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 2.dp),
-                        text = player.stats.extractValue(statType)?.toString() ?: "",
+                        text = player.stats
+                            .extractValue(statType)
+                            .formatStatValue(),
                         fontSize = 13.sp
                     )
                     Text(
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 2.dp),
-                        text = player.stats.extractValue(statType, false)?.toString() ?: "",
+                        text = player.stats
+                            .extractValue(statType, false)
+                            .formatStatValue(),
                         fontSize = 13.sp
                     )
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
