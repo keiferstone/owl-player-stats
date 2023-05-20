@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.owlplayerstats.R
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.TeamSummary
@@ -36,17 +37,16 @@ import com.keiferstone.owlplayerstats.extension.parseHexColor
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayerItem(
-    player: PlayerSummary,
-    team: TeamSummary?,
+    player: PlayerDetail,
     selected: Boolean = false,
-    onPlayerClick: (PlayerSummary) -> Unit = {},
-    onPlayerLongClick: (PlayerSummary) -> Unit = {}) {
+    onPlayerClick: (PlayerDetail) -> Unit = {},
+    onPlayerLongClick: (PlayerDetail) -> Unit = {}) {
     val bigNoodleFontFamily = remember {
         FontFamily(Font(R.font.big_noodle_titling_oblique, FontWeight.Normal))
     }
 
-    val primaryColor = team?.primaryColor?.parseHexColor()?.let { Color(it) } ?: Color.Black
-    val secondaryColor = team?.secondaryColor?.parseHexColor()?.let { Color(it) } ?: Color.White
+    val primaryColor = player.currentTeam?.primaryColor?.parseHexColor()?.let { Color(it) } ?: Color.Black
+    val secondaryColor = player.currentTeam?.secondaryColor?.parseHexColor()?.let { Color(it) } ?: Color.White
 
     BoxWithConstraints(
         modifier = Modifier

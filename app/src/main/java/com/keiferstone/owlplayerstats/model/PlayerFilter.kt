@@ -1,5 +1,7 @@
 package com.keiferstone.owlplayerstats.model
 
+import com.keiferstone.data.extension.hasDetails
+import com.keiferstone.data.extension.hasStats
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.PlayerSummary
@@ -27,6 +29,11 @@ sealed class PlayerFilter {
     object PlaysSupport : PlayerFilter() {
         override fun checkPlayer(player: PlayerSummary) = player.role == PlayerRoles.SUPPORT
         override fun checkPlayer(player: PlayerDetail) = player.role == PlayerRoles.SUPPORT
+    }
+
+    object HasStats : PlayerFilter() {
+        override fun checkPlayer(player: PlayerSummary) = true
+        override fun checkPlayer(player: PlayerDetail) = player.hasStats()
     }
 
     object PlayedFiveMinutes : PlayerFilter() {

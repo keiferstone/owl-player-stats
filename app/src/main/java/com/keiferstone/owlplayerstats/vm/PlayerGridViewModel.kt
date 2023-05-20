@@ -3,7 +3,6 @@ package com.keiferstone.owlplayerstats.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keiferstone.data.repository.OwlPlayerStatsRepository
-import com.keiferstone.owlplayerstats.state.PlayerDatum
 import com.keiferstone.owlplayerstats.state.PlayerGridState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +18,10 @@ class PlayerGridViewModel @Inject constructor(private val repository: OwlPlayerS
         viewModelScope.launch {
             runCatching {
                 repository.getSummary().let { summary ->
-                    uiState.value = PlayerGridState.Content(
-                        data = summary.players.map { playerSummary ->
-                            PlayerDatum(playerSummary, summary.teams.find { it.id == playerSummary.currentTeam })
-                        })
+                    val players = repository.getPlayerDetails(
+                        playerIds = summary.players.map { it.id }
+                    )
+                    uiState.value = PlayerGridState.Content(players)
                 }
             }.getOrElse {
                 uiState.value = PlayerGridState.Error(it.message)

@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.owlplayerstats.R
 import com.keiferstone.owlplayerstats.model.PlayerFilter
@@ -51,13 +52,21 @@ import com.keiferstone.owlplayerstats.vm.PlayerGridViewModel
 @Composable
 fun PlayerGridScreen(
     viewModel: PlayerGridViewModel = hiltViewModel(),
-    onPlayerSelected: (PlayerSummary) -> Unit = {},
-    onPlayerPairSelected: (PlayerSummary, PlayerSummary) -> Unit = { _, _ -> }) {
+    onPlayerSelected: (PlayerDetail) -> Unit = {},
+    onPlayerPairSelected: (PlayerDetail, PlayerDetail) -> Unit = { _, _ -> }) {
 
-    val filters = remember { listOf(PlayerFilter.OnTeam, PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport) }
-    val selectedFilters = remember { mutableStateListOf<PlayerFilter>() }
+    val filters = remember {
+        listOf(
+            PlayerFilter.OnTeam,
+            PlayerFilter.PlaysTank,
+            PlayerFilter.PlaysDps,
+            PlayerFilter.PlaysSupport,
+            PlayerFilter.HasStats
+        )
+    }
+    val selectedFilters = remember { mutableStateListOf<PlayerFilter>(PlayerFilter.HasStats) }
     var searchQuery by remember { mutableStateOf("") }
-    var selectedPlayer by remember { mutableStateOf<PlayerSummary?>(null) }
+    var selectedPlayer by remember { mutableStateOf<PlayerDetail?>(null) }
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
         is PlayerGridState.Loading -> {
@@ -71,7 +80,7 @@ fun PlayerGridScreen(
             }
         }
         is PlayerGridState.Content -> {
-            Column {
+            Column(modifier = Modifier) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -115,20 +124,19 @@ fun PlayerGridScreen(
                     columns = GridCells.Adaptive(120.dp),
                     contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 4.dp)
                 ) {
-                    items(uiState.data
-                        .filter { datum ->
-                            datum.player.name.contains(searchQuery, ignoreCase = true)
+                    items(uiState.players
+                        .filter { player ->
+                            player.name.contains(searchQuery, ignoreCase = true)
                         }
-                        .filter { datum ->
+                        .filter { player ->
                             if (selectedFilters.isEmpty()) true
-                            else selectedFilters.all { it.checkPlayer(datum.player)}
+                            else selectedFilters.all { it.checkPlayer(player)}
                         }
-                        .sortedBy { it.player.name }) { playerDatum ->
+                        .sortedBy { it.name }) { player ->
                             Box {
                                 PlayerItem(
-                                    player = playerDatum.player,
-                                    team = playerDatum.team,
-                                    selected = playerDatum.player.id == selectedPlayer?.id,
+                                    player = player,
+                                    selected = player.id == selectedPlayer?.id,
                                     onPlayerClick = { player ->
                                         selectedPlayer?.let {
                                             if (player.id != it.id) {
