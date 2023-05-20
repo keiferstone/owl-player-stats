@@ -2,8 +2,9 @@ package com.keiferstone.data.extension
 
 import com.keiferstone.data.model.PlayerDetail
 
-fun PlayerDetail.hasStats(): Boolean {
-    return stats.heroDamageDone != null
+fun PlayerDetail.hasDetails(): Boolean {
+    return currentTeam != null
+            || stats.heroDamageDone != null
             || stats.healingDone != null
             || stats.damageTaken != null
             || stats.finalBlows != null

@@ -2,7 +2,7 @@ package com.keiferstone.data.repository
 
 import android.util.Log
 import com.keiferstone.data.api.OwlPlayerStatsClient
-import com.keiferstone.data.extension.hasStats
+import com.keiferstone.data.extension.hasDetails
 import com.keiferstone.data.extension.isStale
 import com.keiferstone.data.extension.toDbRow
 import com.keiferstone.data.extension.toPlayerDetail
@@ -147,7 +147,7 @@ class OwlPlayerStatsRepository @Inject constructor(
 
         playerIds.mapNotNull { playerId ->
             val player = players.find { it.id == playerId }
-            if (forceRefresh || player == null || !player.hasStats()) {
+            if (forceRefresh || player == null || !player.hasDetails()) {
                 Log.d("ops", "fetching player with id $playerId")
                 // Fetch from api
                 async {
