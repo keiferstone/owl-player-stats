@@ -39,12 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.owlplayerstats.R
+import com.keiferstone.owlplayerstats.model.PlayerFilter
 import com.keiferstone.owlplayerstats.ui.component.PlayerItem
-import com.keiferstone.owlplayerstats.state.PlayerFilter
 import com.keiferstone.owlplayerstats.state.PlayerGridState
+import com.keiferstone.owlplayerstats.ui.component.FilterLabel
 import com.keiferstone.owlplayerstats.vm.PlayerGridViewModel
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
@@ -117,15 +117,11 @@ fun PlayerGridScreen(
                 ) {
                     items(uiState.data
                         .filter { datum ->
-                            // Search
                             datum.player.name.contains(searchQuery, ignoreCase = true)
-                                    || datum.player.givenName.contains(searchQuery, ignoreCase = true)
-                                    || datum.player.familyName.contains(searchQuery, ignoreCase = true)
                         }
                         .filter { datum ->
-                            // Filters
                             if (selectedFilters.isEmpty()) true
-                            else selectedFilters.any { it.checkPlayer(datum.player)}
+                            else selectedFilters.all { it.checkPlayer(datum.player)}
                         }
                         .sortedBy { it.player.name }) { playerDatum ->
                             Box {
@@ -150,16 +146,6 @@ fun PlayerGridScreen(
             }
         }
         is PlayerGridState.Error -> Unit // TODO
-    }
-}
-
-@Composable
-fun FilterLabel(filter: PlayerFilter) {
-    when (filter) {
-        PlayerFilter.OnTeam -> Text(stringResource(R.string.on_team))
-        PlayerFilter.PlaysTank -> Text(stringResource(R.string.tank))
-        PlayerFilter.PlaysDps -> Text(stringResource(R.string.dps))
-        PlayerFilter.PlaysSupport -> Text(stringResource(R.string.support))
     }
 }
 

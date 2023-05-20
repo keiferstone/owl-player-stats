@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,11 +22,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.keiferstone.owlplayerstats.state.PlayerFilter
+import com.keiferstone.owlplayerstats.model.PlayerFilter
 import com.keiferstone.owlplayerstats.state.StatListState
+import com.keiferstone.owlplayerstats.ui.component.FilterLabel
 import com.keiferstone.owlplayerstats.ui.component.StatLeadersRow
 import com.keiferstone.owlplayerstats.vm.StatListViewModel
 
@@ -33,7 +35,7 @@ import com.keiferstone.owlplayerstats.vm.StatListViewModel
 fun StatListScreen(
     viewModel: StatListViewModel = hiltViewModel()) {
 
-    val playerFilters = remember { listOf(PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport) }
+    val playerFilters = remember { listOf(PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport, PlayerFilter.PlayedFiveMinutes) }
     val selectedPlayerFilters = remember { mutableStateListOf<PlayerFilter>() }
 
     val scrollState = rememberScrollState()
@@ -44,16 +46,15 @@ fun StatListScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-               CircularProgressIndicator(
+                CircularProgressIndicator(
                    modifier = Modifier.align(Alignment.Center)
-               )
+                )
             }
         }
         is StatListState.Content -> {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
             ) {
                 FlowRow(
                     modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 0.dp)
@@ -71,10 +72,13 @@ fun StatListScreen(
                         )
                     }
                 }
-                uiState.data.forEach {
-                    StatLeadersRow(
-                        statType = it.statType,
-                        leaders = it.leaders)
+                LazyColumn {
+                    items(uiState.data) {
+                        StatLeadersRow(
+                            statType = it.statType,
+                            leaders = it.leaders
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }

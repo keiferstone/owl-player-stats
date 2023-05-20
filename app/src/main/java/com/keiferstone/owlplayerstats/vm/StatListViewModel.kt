@@ -6,7 +6,7 @@ import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.StatType
 import com.keiferstone.data.repository.OwlPlayerStatsRepository
 import com.keiferstone.owlplayerstats.extension.extractValue
-import com.keiferstone.owlplayerstats.state.PlayerFilter
+import com.keiferstone.owlplayerstats.model.PlayerFilter
 import com.keiferstone.owlplayerstats.state.StatLeaderDatum
 import com.keiferstone.owlplayerstats.state.StatListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,10 +33,13 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
                         playerIds = summary.players
                             .filter { playerSummary ->
                                 if (filters.isEmpty()) true
-                                else filters.any { it.checkPlayer(playerSummary) }
+                                else filters.all { it.checkPlayer(playerSummary) }
                             }
                             .map { it.id }
-                    )
+                    ).filter { playerDetail ->
+                        if (filters.isEmpty()) true
+                        else filters.all { it.checkPlayer(playerDetail) }
+                    }
                     val data = StatType.allStatTypes().map { statType ->
                         StatLeaderDatum(statType, players.top5(statType))
                     }
