@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -23,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.keiferstone.data.model.StatType
-import com.keiferstone.owlplayerstats.model.PlayerFilter
+import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.state.StatListState
 import com.keiferstone.owlplayerstats.ui.component.FilterLabel
 import com.keiferstone.owlplayerstats.ui.component.StatLeadersRow
@@ -35,8 +36,8 @@ fun StatListScreen(
     viewModel: StatListViewModel = hiltViewModel(),
     onStatSelected: (StatType) -> Unit = {}) {
 
-    val filters = remember { listOf(PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport, PlayerFilter.PlayedFiveMinutes) }
-    val selectedFilters = remember { mutableStateListOf<PlayerFilter>() }
+    val filters = remember { listOf(Filter.PlaysTank, Filter.PlaysDps, Filter.PlaysSupport, Filter.PlayedFiveMinutes) }
+    val selectedFilters = remember { mutableStateListOf<Filter>() }
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
         StatListState.Loading -> {
@@ -54,20 +55,22 @@ fun StatListScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                FlowRow(
-                    modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 0.dp)
-                ) {
-                    filters.forEach { filter ->
-                        FilterChip(
-                            selected = selectedFilters.contains(filter),
-                            onClick = {
-                                if (selectedFilters.contains(filter)) selectedFilters.remove(filter)
-                                else selectedFilters.add(filter)
-                                viewModel.filterPlayers(selectedFilters.toList())
-                            },
-                            label = { FilterLabel(filter = filter) },
-                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 0.dp, bottom = 0.dp),
-                        )
+                Row {
+                    FlowRow(
+                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 0.dp)
+                    ) {
+                        filters.forEach { filter ->
+                            FilterChip(
+                                selected = selectedFilters.contains(filter),
+                                onClick = {
+                                    if (selectedFilters.contains(filter)) selectedFilters.remove(filter)
+                                    else selectedFilters.add(filter)
+                                    viewModel.filterPlayers(selectedFilters.toList())
+                                },
+                                label = { FilterLabel(filter = filter) },
+                                modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 0.dp, bottom = 0.dp),
+                            )
+                        }
                     }
                 }
                 LazyColumn {

@@ -11,15 +11,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -32,17 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.keiferstone.data.model.PlayerDetail
-import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.model.PlayerFilter
+import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.ui.component.PlayerItem
 import com.keiferstone.owlplayerstats.state.PlayerGridState
 import com.keiferstone.owlplayerstats.ui.component.FilterLabel
@@ -57,14 +51,14 @@ fun PlayerGridScreen(
 
     val filters = remember {
         listOf(
-            PlayerFilter.OnTeam,
-            PlayerFilter.PlaysTank,
-            PlayerFilter.PlaysDps,
-            PlayerFilter.PlaysSupport,
-            PlayerFilter.HasStats
+            Filter.OnTeam,
+            Filter.PlaysTank,
+            Filter.PlaysDps,
+            Filter.PlaysSupport,
+            Filter.HasStats
         )
     }
-    val selectedFilters = remember { mutableStateListOf<PlayerFilter>(PlayerFilter.HasStats) }
+    val selectedFilters = remember { mutableStateListOf<Filter>(Filter.HasStats) }
     var searchQuery by remember { mutableStateOf("") }
     var selectedPlayer by remember { mutableStateOf<PlayerDetail?>(null) }
 

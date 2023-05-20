@@ -1,7 +1,6 @@
 package com.keiferstone.owlplayerstats.ui.screen
 
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -9,19 +8,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,13 +34,10 @@ import com.keiferstone.owlplayerstats.R
 import com.keiferstone.owlplayerstats.extension.extractValue
 import com.keiferstone.owlplayerstats.extension.formatStatValue
 import com.keiferstone.owlplayerstats.extension.nameResId
-import com.keiferstone.owlplayerstats.model.PlayerFilter
+import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.state.StatDetailState
-import com.keiferstone.owlplayerstats.state.StatListState
 import com.keiferstone.owlplayerstats.ui.component.FilterLabel
-import com.keiferstone.owlplayerstats.ui.component.StatLeadersRow
 import com.keiferstone.owlplayerstats.vm.StatDetailViewModel
-import com.keiferstone.owlplayerstats.vm.StatListViewModel
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -55,13 +47,13 @@ fun StatDetailScreen(
 
     val filters = remember {
         listOf(
-            PlayerFilter.PlaysTank,
-            PlayerFilter.PlaysDps,
-            PlayerFilter.PlaysSupport,
-            PlayerFilter.HasStat(statType)
+            Filter.PlaysTank,
+            Filter.PlaysDps,
+            Filter.PlaysSupport,
+            Filter.HasStat(statType)
         )
     }
-    val selectedFilters = remember { mutableStateListOf<PlayerFilter>(PlayerFilter.HasStat(statType)) }
+    val selectedFilters = remember { mutableStateListOf<Filter>(Filter.HasStat(statType)) }
 
     val scrollState = rememberScrollState()
 

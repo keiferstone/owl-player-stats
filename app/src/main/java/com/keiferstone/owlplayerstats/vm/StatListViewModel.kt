@@ -6,7 +6,7 @@ import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.StatType
 import com.keiferstone.data.repository.OwlPlayerStatsRepository
 import com.keiferstone.owlplayerstats.extension.extractValue
-import com.keiferstone.owlplayerstats.model.PlayerFilter
+import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.state.StatLeaderDatum
 import com.keiferstone.owlplayerstats.state.StatListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +23,9 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
         loadPlayerDetails()
     }
 
-    fun filterPlayers(filters: List<PlayerFilter>) = loadPlayerDetails(filters)
+    fun filterPlayers(filters: List<Filter>) = loadPlayerDetails(filters)
 
-    private fun loadPlayerDetails(filters: List<PlayerFilter> = emptyList()) {
+    private fun loadPlayerDetails(filters: List<Filter> = emptyList()) {
         viewModelScope.launch {
             runCatching {
                 repository.getSummary().let { summary ->
