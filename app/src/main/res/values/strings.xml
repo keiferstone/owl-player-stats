@@ -9,6 +9,7 @@
     <string name="dps">Dps</string>
     <string name="support">Support</string>
     <string name="has_stats">Has stats</string>
+    <string name="has_stat">Has stat</string>
     <string name="played_five_minutes">Played 5 min</string>
     <string name="stats">Stats</string>
     <string name="player">Player</string>

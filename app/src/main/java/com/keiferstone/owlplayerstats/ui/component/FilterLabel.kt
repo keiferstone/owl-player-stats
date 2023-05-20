@@ -14,6 +14,7 @@ fun FilterLabel(filter: PlayerFilter) {
         PlayerFilter.PlaysDps -> Text(stringResource(R.string.dps))
         PlayerFilter.PlaysSupport -> Text(stringResource(R.string.support))
         PlayerFilter.HasStats -> Text(stringResource(R.string.has_stats))
+        is PlayerFilter.HasStat -> Text(stringResource(R.string.has_stat))
         PlayerFilter.PlayedFiveMinutes -> Text(stringResource(R.string.played_five_minutes))
     }
 }

@@ -1,7 +1,6 @@
 package com.keiferstone.owlplayerstats.ui.screen
 
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -38,10 +35,8 @@ fun StatListScreen(
     viewModel: StatListViewModel = hiltViewModel(),
     onStatSelected: (StatType) -> Unit = {}) {
 
-    val playerFilters = remember { listOf(PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport, PlayerFilter.PlayedFiveMinutes) }
-    val selectedPlayerFilters = remember { mutableStateListOf<PlayerFilter>() }
-
-    val scrollState = rememberScrollState()
+    val filters = remember { listOf(PlayerFilter.PlaysTank, PlayerFilter.PlaysDps, PlayerFilter.PlaysSupport, PlayerFilter.PlayedFiveMinutes) }
+    val selectedFilters = remember { mutableStateListOf<PlayerFilter>() }
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
         StatListState.Loading -> {
@@ -62,13 +57,13 @@ fun StatListScreen(
                 FlowRow(
                     modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 0.dp)
                 ) {
-                    playerFilters.forEach { filter ->
+                    filters.forEach { filter ->
                         FilterChip(
-                            selected = selectedPlayerFilters.contains(filter),
+                            selected = selectedFilters.contains(filter),
                             onClick = {
-                                if (selectedPlayerFilters.contains(filter)) selectedPlayerFilters.remove(filter)
-                                else selectedPlayerFilters.add(filter)
-                                viewModel.filterPlayers(selectedPlayerFilters.toList())
+                                if (selectedFilters.contains(filter)) selectedFilters.remove(filter)
+                                else selectedFilters.add(filter)
+                                viewModel.filterPlayers(selectedFilters.toList())
                             },
                             label = { FilterLabel(filter = filter) },
                             modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 0.dp, bottom = 0.dp),

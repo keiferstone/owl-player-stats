@@ -5,6 +5,8 @@ import com.keiferstone.data.extension.hasStats
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.PlayerSummary
+import com.keiferstone.data.model.StatType
+import com.keiferstone.owlplayerstats.extension.extractValue
 import java.lang.UnsupportedOperationException
 
 sealed class PlayerFilter {
@@ -34,6 +36,11 @@ sealed class PlayerFilter {
     object HasStats : PlayerFilter() {
         override fun checkPlayer(player: PlayerSummary) = true
         override fun checkPlayer(player: PlayerDetail) = player.hasStats()
+    }
+
+    data class HasStat(private val statType: StatType) : PlayerFilter() {
+        override fun checkPlayer(player: PlayerSummary) = true
+        override fun checkPlayer(player: PlayerDetail) = player.stats.extractValue(statType) != null
     }
 
     object PlayedFiveMinutes : PlayerFilter() {
