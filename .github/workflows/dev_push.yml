@@ -1,4 +1,4 @@
-name: Development Build
+name: Dev Build
 
 on:
   push:
@@ -32,3 +32,5 @@ jobs:
 
       - name: Upload debug build to Firebase
         run: ./gradlew appDistributionUploadDebug
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
