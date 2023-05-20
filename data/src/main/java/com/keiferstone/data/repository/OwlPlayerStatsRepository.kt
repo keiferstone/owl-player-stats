@@ -126,7 +126,7 @@ class OwlPlayerStatsRepository @Inject constructor(
                     database.playerQueries.selectById(playerId).executeAsOneOrNull()?.let { cachedPlayer ->
                         Log.d("ops", "loaded cached player with id $playerId")
                         if (!cachedPlayer.isStale()) {
-                            Log.d("ops", "cached player not stale & has stats\n$cachedPlayer")
+                            Log.d("ops", "cached player not stale")
                             cachedPlayer.toPlayerDetail { teamIds ->
                                 database.teamQueries.transactionWithResult {
                                     Log.d("ops", "loading teams ${teamIds.joinToString()}")
@@ -146,7 +146,8 @@ class OwlPlayerStatsRepository @Inject constructor(
         Log.d("ops", "loaded ${players.size} players")
 
         playerIds.mapNotNull { playerId ->
-            if (forceRefresh || !players.map { it.id }.contains(playerId)) {
+            val player = players.find { it.id == playerId }
+            if (forceRefresh || player == null || !player.hasStats()) {
                 Log.d("ops", "fetching player with id $playerId")
                 // Fetch from api
                 async {

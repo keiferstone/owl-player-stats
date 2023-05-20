@@ -13,35 +13,6 @@ fun Player.isStale(ttl: Long = Ttls.ONE_DAY): Boolean {
     }
 }
 
-fun Player.hasStats(): Boolean {
-    return damage_done != null
-            || healing_done != null
-            || damage_taken != null
-            || final_blows != null
-			|| eliminations != null
-			|| deaths != null
-			|| time_spent_on_fire != null
-			|| solo_kills != null
-			|| ults_used != null
-			|| ults_earned != null
-			|| time_played != null
-			|| dragonstrike_kills != null
-			|| players_teleported != null
-			|| critical_hits != null
-			|| shots_hit != null
-			|| enemies_hacked != null
-			|| enemies_empd != null
-			|| storm_arrow_kills != null
-			|| scoped_hits != null
-			|| scoped_critical_hits != null
-			|| bob_kills != null
-			|| scoped_critical_hit_kills != null
-			|| charged_shot_kills != null
-			|| knockback_kills != null
-			|| deadeye_kills != null
-			|| overclock_kills != null
-}
-
 fun Player.toPlayerSummary(): PlayerSummary {
     return PlayerSummary(
         id = id,
