@@ -6,12 +6,9 @@ import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.StatType
 import com.keiferstone.data.repository.OwlPlayerStatsRepository
 import com.keiferstone.owlplayerstats.extension.extractValue
-import com.keiferstone.owlplayerstats.extension.nameResId
 import com.keiferstone.owlplayerstats.state.StatLeaderDatum
 import com.keiferstone.owlplayerstats.state.StatListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,16 +21,13 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
     init {
         viewModelScope.launch {
             runCatching {
-                repository.getSummary()?.let { summary ->
-                    val playerDetails = summary.players.map { playerSummary ->
-                        async { repository.getPlayer(playerSummary.id) }
-                    }.awaitAll().filterNotNull()
+                repository.getSummary().let { summary ->
+                    val players = repository.getPlayerDetails(
+                        playerIds = summary.players.map { it.id })
                     val data = StatType.allStatTypes().map { statType ->
-                        StatLeaderDatum(statType, playerDetails.top5(statType))
+                        StatLeaderDatum(statType, players.top5(statType))
                     }
                     uiState.value = StatListState.Content(data)
-                } ?: run {
-                    uiState.value = StatListState.Error()
                 }
             }.getOrElse {
                 uiState.value = StatListState.Error(it.message)

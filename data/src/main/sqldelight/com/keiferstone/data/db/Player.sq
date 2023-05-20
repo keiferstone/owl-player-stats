@@ -6,7 +6,7 @@ CREATE TABLE player (
     number INTEGER NOT NULL,
     role TEXT,
     preferred_slot INTEGER NOT NULL,
-    current_teams TEXT AS List<Long> NOT NULL,
+    current_teams TEXT AS List<Long>,
     given_name TEXT NOT NULL,
     family_name TEXT NOT NULL,
     headshot_url TEXT,
@@ -36,7 +36,7 @@ CREATE TABLE player (
     knockback_kills INTEGER,
     deadeye_kills INTEGER,
     overclock_kills INTEGER,
-    team_ids TEXT AS List<Long> NOT NULL,
+    team_ids TEXT AS List<Long>,
     last_fetched_at INTEGER
 );
 
@@ -87,3 +87,17 @@ team_ids,
 last_fetched_at
 )
 VALUES ?;
+
+insertSummary:
+INSERT OR IGNORE INTO player(
+id,
+name,
+number,
+role,
+preferred_slot,
+current_teams,
+given_name,
+family_name,
+headshot_url
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);

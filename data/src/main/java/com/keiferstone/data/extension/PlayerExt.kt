@@ -4,12 +4,56 @@ import com.keiferstone.data.db.Player
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerDetailStats
 import com.keiferstone.data.model.PlayerDetailTeam
+import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.Ttls
 
 fun Player.isStale(ttl: Long = Ttls.ONE_DAY): Boolean {
     return System.currentTimeMillis().let { currentTime ->
-        (last_fetched_at ?: currentTime) + ttl < currentTime
+        currentTime - (last_fetched_at ?: currentTime) > ttl
     }
+}
+
+fun Player.hasStats(): Boolean {
+    return damage_done != null
+            || healing_done != null
+            || damage_taken != null
+            || final_blows != null
+			|| eliminations != null
+			|| deaths != null
+			|| time_spent_on_fire != null
+			|| solo_kills != null
+			|| ults_used != null
+			|| ults_earned != null
+			|| time_played != null
+			|| dragonstrike_kills != null
+			|| players_teleported != null
+			|| critical_hits != null
+			|| shots_hit != null
+			|| enemies_hacked != null
+			|| enemies_empd != null
+			|| storm_arrow_kills != null
+			|| scoped_hits != null
+			|| scoped_critical_hits != null
+			|| bob_kills != null
+			|| scoped_critical_hit_kills != null
+			|| charged_shot_kills != null
+			|| knockback_kills != null
+			|| deadeye_kills != null
+			|| overclock_kills != null
+}
+
+fun Player.toPlayerSummary(): PlayerSummary {
+    return PlayerSummary(
+        id = id,
+        name = name,
+        number = number,
+        role = role,
+        preferredSlot = preferred_slot,
+        currentTeam = current_teams?.firstOrNull(),
+        givenName = given_name,
+        familyName = family_name,
+        headshotUrl = headshot_url
+    )
 }
 
 fun Player.toPlayerDetail(loadTeams: (List<Long>) -> List<PlayerDetailTeam>): PlayerDetail {
@@ -19,38 +63,38 @@ fun Player.toPlayerDetail(loadTeams: (List<Long>) -> List<PlayerDetailTeam>): Pl
         number = number,
         role = role,
         preferredSlot = preferred_slot,
-        currentTeams = current_teams,
+        currentTeams = current_teams ?: emptyList(),
         givenName = given_name,
         familyName = family_name,
         headshotUrl = headshot_url,
-        loadTeams(team_ids),
-        PlayerDetailStats(
-            damage_done,
-            healing_done,
-            damage_taken,
-            final_blows,
-            eliminations,
-            deaths,
-            time_spent_on_fire,
-            solo_kills,
-            ults_used,
-            ults_earned,
-            time_played,
-            dragonstrike_kills,
-            players_teleported,
-            critical_hits,
-            shots_hit,
-            enemies_hacked,
-            enemies_empd,
-            storm_arrow_kills,
-            scoped_hits,
-            scoped_critical_hits,
-            bob_kills,
-            scoped_critical_hit_kills,
-            charged_shot_kills,
-            knockback_kills,
-            deadeye_kills,
-            overclock_kills
+        teams = loadTeams(team_ids ?: emptyList()),
+        stats = PlayerDetailStats(
+            heroDamageDone =  damage_done,
+            healingDone = healing_done,
+            damageTaken = damage_taken,
+            finalBlows = final_blows,
+            eliminations = eliminations,
+            deaths = deaths,
+            timeSpentOnFire = time_spent_on_fire,
+            soloKills = solo_kills,
+            ultsUsed = ults_used,
+            ultsEarned = ults_earned,
+            timePlayed = time_played,
+            dragonstrikeKills = dragonstrike_kills,
+            playersTeleported = players_teleported,
+            criticalHits = critical_hits,
+            shotsHit = shots_hit,
+            enemiesHacked = enemies_hacked,
+            enemiesEMPd = enemies_empd,
+            stormArrowKills = storm_arrow_kills,
+            scopedHits = scoped_hits,
+            scopedCriticalHits = scoped_critical_hits,
+            bobKills = bob_kills,
+            scopedCriticalHitKills = scoped_critical_hit_kills,
+            chargedShotKills = charged_shot_kills,
+            knockbackKills = knockback_kills,
+            deadeyeKills = deadeye_kills,
+            overclockKills = overclock_kills
         )
     )
 }

@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -48,15 +51,23 @@ import com.keiferstone.owlplayerstats.vm.PlayerGridViewModel
 fun PlayerGridScreen(
     viewModel: PlayerGridViewModel = hiltViewModel(),
     onPlayerSelected: (PlayerSummary) -> Unit = {},
-    onPlayerPairSelected: (PlayerSummary, PlayerSummary) -> Unit = { _, _ -> },
-    onStatsSelected: () -> Unit = {}) {
+    onPlayerPairSelected: (PlayerSummary, PlayerSummary) -> Unit = { _, _ -> }) {
 
     val selectedFilters = remember { mutableStateListOf<PlayerFilter>() }
     var searchQuery by remember { mutableStateOf("") }
     var selectedPlayer by remember { mutableStateOf<PlayerSummary?>(null) }
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
-        is PlayerGridState.Loading -> Unit // TODO
+        is PlayerGridState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
         is PlayerGridState.Content -> {
             Column {
                 Row(
@@ -64,8 +75,8 @@ fun PlayerGridScreen(
                 ) {
                     OutlinedTextField(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp),
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
                         value = searchQuery,
                         onValueChange = {
                             searchQuery = it
@@ -73,16 +84,6 @@ fun PlayerGridScreen(
                         label = {
                             Text(stringResource(R.string.search))
                         })
-                    IconButton(
-                        onClick = { onStatsSelected() },
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .align(Alignment.CenterVertically)) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_rounded_outlined_leaderboard_24),
-                            contentDescription = "Stats",
-                        )
-                    }
                 }
                 FlowRow(
                     modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 0.dp)

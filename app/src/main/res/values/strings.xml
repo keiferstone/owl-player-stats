@@ -1,15 +1,14 @@
 <resources>
     <string name="app_name">OWL Player Stats</string>
 
-    <string name="player_grid_title">Players</string>
-    <string name="team_list_title">Teams</string>
+    <string name="players">Players</string>
     <string name="search">Search</string>
     <string name="on_team">On team</string>
     <string name="has_photo">Has photo</string>
     <string name="tank">Tank</string>
     <string name="dps">Dps</string>
     <string name="support">Support</string>
-
+    <string name="stats">Stats</string>
     <string name="stats_per_ten">Stats per 10 minutes</string>
     <string name="damage_done">Damage done</string>
     <string name="healing_done">Healing done</string>

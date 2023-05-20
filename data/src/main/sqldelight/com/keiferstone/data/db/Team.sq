@@ -17,6 +17,7 @@ SELECT * FROM team WHERE id IN ?;
 insert:
 INSERT OR REPLACE INTO team(
 id,
+code,
 name,
 logo,
 icon,
