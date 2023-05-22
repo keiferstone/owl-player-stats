@@ -34,8 +34,6 @@ class OwlPlayerStatsRepository @Inject constructor(
     }
 
     suspend fun getSummary(forceRefresh: Boolean = false): Summary = withContext(Dispatchers.IO) {
-        Log.d("ops", "getSummary($forceRefresh)")
-
         var summary = if (!forceRefresh) {
             // Check cache
             database.summaryQueries.select().executeAsOneOrNull()?.let { cachedSummary ->
@@ -57,7 +55,6 @@ class OwlPlayerStatsRepository @Inject constructor(
             database.summaryQueries.insert(System.currentTimeMillis())
             database.playerQueries.transaction {
                 summary.players.forEach { player ->
-                    Log.d("ops", "inserting player summary $player")
                     database.playerQueries.insertSummary(
                         id = player.id,
                         name = player.name,
@@ -73,7 +70,6 @@ class OwlPlayerStatsRepository @Inject constructor(
             }
             database.teamQueries.transaction {
                 summary.teams.forEach { team ->
-                    Log.d("ops", "inserting team summary $team")
                     database.teamQueries.insert(team.toDbRow())
                 }
             }
@@ -82,8 +78,6 @@ class OwlPlayerStatsRepository @Inject constructor(
     }
 
     suspend fun getPlayerDetail(playerId: Long, forceRefresh: Boolean = false): PlayerDetail = withContext(Dispatchers.IO) {
-        Log.d("ops", "getPlayer($playerId, $forceRefresh)")
-
         var player = if (!forceRefresh) {
             // Check cache
             database.playerQueries.selectById(playerId).executeAsOneOrNull()?.let { cachedPlayer ->
@@ -96,11 +90,7 @@ class OwlPlayerStatsRepository @Inject constructor(
             }
         } else null
 
-        Log.d("ops", "cached player = $player")
-
         player = if (forceRefresh || player == null) {
-            Log.d("ops", "refreshing player")
-
             // Fetch from api
             client.owlClient.getPlayer(
                 authorization = requireAccessToken().toBearerString(),
@@ -109,29 +99,22 @@ class OwlPlayerStatsRepository @Inject constructor(
                 database.playerQueries.insert(it.toDbRow())
             }
         } else player
-        Log.d("ops", "player = $player")
         player
     }
 
     suspend fun getPlayerDetails(
         playerIds: List<Long>,
         forceRefresh: Boolean = false): List<PlayerDetail> = withContext(Dispatchers.IO) {
-        Log.d("ops", "getPlayerDetails(${playerIds.joinToString()}, $forceRefresh)")
 
         val players = mutableListOf<PlayerDetail>()
         if (!forceRefresh) {
-            Log.d("ops", "checking player cache")
             database.playerQueries.transactionWithResult {
                 playerIds.forEach { playerId ->
                     database.playerQueries.selectById(playerId).executeAsOneOrNull()?.let { cachedPlayer ->
-                        Log.d("ops", "loaded cached player with id $playerId")
                         if (!cachedPlayer.isStale()) {
-                            Log.d("ops", "cached player not stale")
                             cachedPlayer.toPlayerDetail { teamIds ->
                                 database.teamQueries.transactionWithResult {
-                                    Log.d("ops", "loading teams ${teamIds.joinToString()}")
                                     database.teamQueries.selectByIds(teamIds).executeAsList().map { cachedTeam ->
-                                        Log.d("ops", "loaded cached team with id ${cachedTeam.id}")
                                         cachedTeam.toPlayerDetailTeam()
                                     }
                                 }
@@ -143,12 +126,10 @@ class OwlPlayerStatsRepository @Inject constructor(
                 }
             }
         }
-        Log.d("ops", "loaded ${players.size} players")
 
         playerIds.mapNotNull { playerId ->
             val player = players.find { it.id == playerId }
             if (forceRefresh || player == null || !player.hasDetails()) {
-                Log.d("ops", "fetching player with id $playerId")
                 // Fetch from api
                 async {
                     client.owlClient.getPlayer(

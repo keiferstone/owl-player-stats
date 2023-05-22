@@ -6,4 +6,5 @@ object NavRoutes {
     const val PLAYER_GRID = "player-grid"
     const val PLAYER_DETAIL = "player-detail"
     const val PLAYER_COMPARISON = "player-comparison"
+    const val FILTERS = "filters"
 }

@@ -1,6 +1,8 @@
 package com.keiferstone.owlplayerstats.ui.navigation
 
 
+import android.text.TextUtils.split
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -30,6 +32,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
+import com.keiferstone.owlplayerstats.extension.parseFilter
+import com.keiferstone.owlplayerstats.extension.parseFilterArgs
+import com.keiferstone.owlplayerstats.ui.screen.FilterScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerComparisonScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerDetailScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerGridScreen
@@ -92,9 +97,15 @@ fun MainNavHost() {
                 startDestination = NavRoutes.STAT_LIST
             ) {
                 composable(route = NavRoutes.STAT_LIST) {
-                    StatListScreen { statType ->
-                        navController.navigate("${NavRoutes.STAT_DETAIL}/${statType.name}")
-                    }
+                    StatListScreen(
+                        navController = navController,
+                        onMoreFiltersSelected = { selectedFilters ->
+                            navController.navigate("${NavRoutes.FILTERS}?${NavArgs.FILTERS}=${selectedFilters.joinToString { it.id }}")
+                        },
+                        onStatSelected = { statType ->
+                            navController.navigate("${NavRoutes.STAT_DETAIL}/${statType.name}")
+                        }
+                    )
                 }
                 composable(
                     route = "${NavRoutes.STAT_DETAIL}/{${NavArgs.STAT_TYPE}}",
@@ -105,6 +116,10 @@ fun MainNavHost() {
                 }
                 composable(route = NavRoutes.PLAYER_GRID) {
                     PlayerGridScreen(
+                        navController = navController,
+                        onMoreFiltersSelected = { selectedFilters ->
+                            navController.navigate("${NavRoutes.FILTERS}?${NavArgs.FILTERS}=${selectedFilters.joinToString { it.id }}")
+                        },
                         onPlayerSelected = { player ->
                             navController.navigate("${NavRoutes.PLAYER_DETAIL}/${player.id}")
                         },
@@ -132,6 +147,18 @@ fun MainNavHost() {
                     if (player1Id != null && player2Id != null) {
                         PlayerComparisonScreen(player1Id, player2Id)
                     }
+                }
+                composable(
+                    route = "${NavRoutes.FILTERS}?${NavArgs.FILTERS}={${NavArgs.FILTERS}}",
+                    arguments = listOf(navArgument(NavArgs.FILTERS) {
+                        nullable = true
+                        defaultValue = null
+                    })
+                ) { backStackEntry ->
+                    val filters = backStackEntry.arguments
+                        ?.getString(NavArgs.FILTERS)
+                        .parseFilterArgs()
+                    FilterScreen(navController, filters)
                 }
             }
         }

@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,7 +37,6 @@ import com.keiferstone.owlplayerstats.extension.formatStatValue
 import com.keiferstone.owlplayerstats.extension.nameResId
 import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.state.StatDetailState
-import com.keiferstone.owlplayerstats.ui.component.FilterLabel
 import com.keiferstone.owlplayerstats.vm.StatDetailViewModel
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
@@ -85,7 +85,7 @@ fun StatDetailScreen(
                                 else selectedFilters.add(filter)
                                 viewModel.filterPlayers(selectedFilters.toList())
                             },
-                            label = { FilterLabel(filter = filter) },
+                            label = { Text(filter.toString(LocalContext.current.resources)) },
                             modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 0.dp, bottom = 0.dp),
                         )
                     }

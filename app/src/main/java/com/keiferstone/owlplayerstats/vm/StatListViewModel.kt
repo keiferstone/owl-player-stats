@@ -1,5 +1,6 @@
 package com.keiferstone.owlplayerstats.vm
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keiferstone.data.model.PlayerDetail
@@ -23,7 +24,7 @@ class StatListViewModel @Inject constructor(private val repository: OwlPlayerSta
         loadPlayerDetails()
     }
 
-    fun filterPlayers(filters: List<Filter>) = loadPlayerDetails(filters)
+    fun filterData(filters: List<Filter>) = loadPlayerDetails(filters)
 
     private fun loadPlayerDetails(filters: List<Filter> = emptyList()) {
         viewModelScope.launch {

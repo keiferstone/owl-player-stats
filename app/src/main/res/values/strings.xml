@@ -42,4 +42,5 @@
     <string name="knockback_kills">Knockback kills</string>
     <string name="deadeye_kills">Deadeye kills</string>
     <string name="overclock_kills">Overclock kills</string>
+    <string name="filters">Filters</string>
 </resources>
