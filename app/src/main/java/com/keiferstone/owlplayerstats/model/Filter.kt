@@ -24,7 +24,7 @@ sealed class Filter(val id: String) {
         PlaysSupport -> resources.getString(R.string.support)
         HasStats -> resources.getString(R.string.has_stats)
         is HasStat -> "${resources.getString(R.string.has_stat)}: ${resources.getString(statType.nameResId())}"
-        is TimePlayed -> "${resources.getString(R.string.time_played)}: ${seconds / 60} minutes"
+        is TimePlayed -> "${resources.getString(R.string.time_played)}: ${seconds / 60}min"
     }
 
     object OnTeam : Filter(ON_TEAM) {
