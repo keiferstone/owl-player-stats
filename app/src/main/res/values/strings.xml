@@ -9,8 +9,7 @@
     <string name="dps">Dps</string>
     <string name="support">Support</string>
     <string name="has_stats">Has stats</string>
-    <string name="has_stat">Has stat</string>
-    <string name="played_five_minutes">Played 5 min</string>
+    <string name="has_stat">Has stat: %1$s</string>
     <string name="stats">Stats</string>
     <string name="player">Player</string>
     <string name="per_ten">Per 10</string>
@@ -27,6 +26,7 @@
     <string name="ults_used">Ultimates used</string>
     <string name="ults_earned">Ultimates earned</string>
     <string name="time_played">Time played</string>
+    <string name="time_played_min">Time played: %1$dmin</string>
     <string name="dragonstrike_kills">Dragonstrike kills</string>
     <string name="players_teleported">Players teleported</string>
     <string name="critical_hits">Critical hits</string>

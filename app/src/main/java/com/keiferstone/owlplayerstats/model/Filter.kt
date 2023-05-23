@@ -6,6 +6,7 @@ import com.keiferstone.data.extension.hasStats
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.PlayerRoles.DPS
+import com.keiferstone.data.model.PlayerRoles.SUPPORT
 import com.keiferstone.data.model.PlayerRoles.TANK
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.StatType
@@ -23,8 +24,8 @@ sealed class Filter(val id: String) {
         PlaysDps -> resources.getString(R.string.dps)
         PlaysSupport -> resources.getString(R.string.support)
         HasStats -> resources.getString(R.string.has_stats)
-        is HasStat -> "${resources.getString(R.string.has_stat)}: ${resources.getString(statType.nameResId())}"
-        is TimePlayed -> "${resources.getString(R.string.time_played)}: ${seconds / 60}min"
+        is HasStat -> resources.getString(R.string.has_stat, resources.getString(statType.nameResId()))
+        is TimePlayed -> resources.getString(R.string.time_played_min, seconds / 60)
     }
 
     object OnTeam : Filter(ON_TEAM) {
