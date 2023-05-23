@@ -24,9 +24,7 @@ class PlayerComparisonViewModel @Inject constructor(private val repository: OwlP
                 val player1 = player1Async.await()
                 val player2 = player2Async.await()
 
-                uiState.value = if (player1 != null && player2 != null) {
-                    PlayerComparisonState.Content(player1, player2)
-                } else PlayerComparisonState.Error()
+                PlayerComparisonState.Content(player1, player2)
             }.getOrElse {
                 uiState.value = PlayerComparisonState.Error(it.message)
             }

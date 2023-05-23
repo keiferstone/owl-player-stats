@@ -1,11 +1,23 @@
 package com.keiferstone.data.extension
 
 import com.keiferstone.data.db.Player
+import com.keiferstone.data.db.Summary_ids
 import com.keiferstone.data.db.Team
 import com.keiferstone.data.model.PlayerDetail
+import com.keiferstone.data.model.PlayerDetailTeam
 import com.keiferstone.data.model.PlayerSummary
+import com.keiferstone.data.model.Summary
+import com.keiferstone.data.model.SummaryIds
 import com.keiferstone.data.model.TeamSummary
 
+
+fun SummaryIds.toDbRow(lastFetchedAt: Long = System.currentTimeMillis()): Summary_ids {
+    return Summary_ids(
+        player_ids = playerIds,
+        team_ids = teamIds,
+        last_fetched_at = lastFetchedAt
+    )
+}
 
 fun PlayerDetail.toDbRow(lastFetchedAt: Long = System.currentTimeMillis()): Player {
     return Player(
@@ -49,11 +61,11 @@ fun PlayerDetail.toDbRow(lastFetchedAt: Long = System.currentTimeMillis()): Play
     )
 }
 
-fun TeamSummary.toDbRow(): Team {
+fun PlayerDetailTeam.toDbRow(): Team {
     return Team(
         id = id,
-        code = code,
-        name = name,
+        code = null,
+        name = null,
         logo = logo,
         icon = icon,
         primary_color = primaryColor,

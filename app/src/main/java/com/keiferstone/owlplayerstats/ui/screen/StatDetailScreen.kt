@@ -83,7 +83,7 @@ fun StatDetailScreen(
                             onClick = {
                                 if (selectedFilters.contains(filter)) selectedFilters.remove(filter)
                                 else selectedFilters.add(filter)
-                                viewModel.filterPlayers(selectedFilters.toList())
+                                viewModel.filterData(selectedFilters.toList())
                             },
                             label = { Text(filter.toString(LocalContext.current.resources)) },
                             modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 0.dp, bottom = 0.dp),

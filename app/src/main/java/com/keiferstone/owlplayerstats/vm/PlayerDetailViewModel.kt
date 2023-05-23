@@ -17,10 +17,8 @@ class PlayerDetailViewModel @Inject constructor(private val repository: OwlPlaye
     fun loadPlayer(playerId: Long) {
         viewModelScope.launch {
             runCatching {
-                repository.getPlayerDetail(playerId)?.let {
+                repository.getPlayerDetail(playerId).let {
                     uiState.value = PlayerDetailState.Content(it)
-                } ?: run {
-                    uiState.value = PlayerDetailState.Error()
                 }
             }.getOrElse {
                 uiState.value = PlayerDetailState.Error(it.message)

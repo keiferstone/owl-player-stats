@@ -7,7 +7,7 @@ import com.keiferstone.data.model.PlayerDetailTeam
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.Ttls
 
-fun Player.isStale(ttl: Long = Ttls.ONE_DAY): Boolean {
+fun Player.isStale(ttl: Long = Ttls.ONE_WEEK): Boolean {
     return System.currentTimeMillis().let { currentTime ->
         currentTime - (last_fetched_at ?: currentTime) > ttl
     }

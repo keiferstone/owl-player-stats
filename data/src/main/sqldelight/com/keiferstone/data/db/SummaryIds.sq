@@ -1,0 +1,18 @@
+import kotlin.collections.List;
+
+CREATE TABLE summary_ids (
+    player_ids TEXT AS List<kotlin.Long>,
+    team_ids TEXT AS List<kotlin.Long>,
+    last_fetched_at INTEGER
+);
+
+select:
+SELECT * FROM summary_ids LIMIT 1;
+
+insert:
+INSERT OR REPLACE INTO summary_ids(
+player_ids,
+team_ids,
+last_fetched_at
+)
+VALUES ?;

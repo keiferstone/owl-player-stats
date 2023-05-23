@@ -12,44 +12,38 @@ import com.keiferstone.owlplayerstats.state.StatLeaderDatum
 import com.keiferstone.owlplayerstats.state.StatListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 
 @HiltViewModel
-class StatListViewModel @Inject constructor(private val repository: OwlPlayerStatsRepository) : ViewModel() {
-    val uiState = MutableStateFlow<StatListState>(StatListState.Loading)
+class StatListViewModel @Inject constructor(repository: OwlPlayerStatsRepository) : ViewModel() {
+    private val selectedFilters = MutableStateFlow(emptyList<Filter>())
 
-    init {
-        loadPlayerDetails()
-    }
-
-    fun filterData(filters: List<Filter>) = loadPlayerDetails(filters)
-
-    private fun loadPlayerDetails(filters: List<Filter> = emptyList()) {
-        viewModelScope.launch {
-            runCatching {
-                repository.getSummary().let { summary ->
-                    val players = repository.getPlayerDetails(
-                        playerIds = summary.players
-                            .filter { playerSummary ->
-                                if (filters.isEmpty()) true
-                                else filters.all { it.checkPlayer(playerSummary) }
-                            }
-                            .map { it.id }
-                    ).filter { playerDetail ->
-                        if (filters.isEmpty()) true
-                        else filters.all { it.checkPlayer(playerDetail) }
-                    }
-                    val data = StatType.allStatTypes().map { statType ->
-                        StatLeaderDatum(statType, players.top5(statType))
-                    }
-                    uiState.value = StatListState.Content(data)
-                }
-            }.getOrElse {
-                uiState.value = StatListState.Error(it.message)
-            }
+    val uiState = combine(repository.allPlayerDetailsResource.flow, selectedFilters) { playerDetails, selectedFilters ->
+        playerDetails.filter { playerSummary ->
+            if (selectedFilters.isEmpty()) true
+            else selectedFilters.all { it.checkPlayer(playerSummary) }
         }
+    }
+    .map<List<PlayerDetail>, StatListState> { playerDetails ->
+        val data = StatType.allStatTypes().map { statType ->
+            StatLeaderDatum(statType, playerDetails.top5(statType))
+        }
+        StatListState.Content(data)
+    }
+    .catch { emit(StatListState.Error(it.message)) }
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = StatListState.Loading)
+
+    fun filterData(filters: List<Filter>) {
+        selectedFilters.value = filters
     }
 
     private fun List<PlayerDetail>.top5(statType: StatType): List<PlayerDetail> {

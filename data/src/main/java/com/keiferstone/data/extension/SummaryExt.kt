@@ -1,11 +1,12 @@
 package com.keiferstone.data.extension
 
-import com.keiferstone.data.db.Summary
-import com.keiferstone.data.model.Ttls
+import com.keiferstone.data.model.Summary
+import com.keiferstone.data.model.SummaryIds
 
 
-fun Summary.isStale(ttl: Long = Ttls.ONE_DAY): Boolean {
-    return System.currentTimeMillis().let { currentTime ->
-        currentTime - (last_fetched_at ?: currentTime) > ttl
-    }
+fun Summary.toSummaryIds(): SummaryIds {
+    return SummaryIds(
+        playerIds = players.map { it.id },
+        teamIds = teams.map { it.id }
+    )
 }
