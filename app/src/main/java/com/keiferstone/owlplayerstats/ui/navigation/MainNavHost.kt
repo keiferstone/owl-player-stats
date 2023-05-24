@@ -1,8 +1,6 @@
 package com.keiferstone.owlplayerstats.ui.navigation
 
 
-import android.text.TextUtils.split
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -14,14 +12,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -32,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.extension.parseFilter
 import com.keiferstone.owlplayerstats.extension.parseFilterArgs
 import com.keiferstone.owlplayerstats.ui.screen.FilterScreen
 import com.keiferstone.owlplayerstats.ui.screen.PlayerComparisonScreen
@@ -98,7 +92,6 @@ fun MainNavHost() {
             ) {
                 composable(route = NavRoutes.STAT_LIST) {
                     StatListScreen(
-                        navController = navController,
                         onMoreFiltersSelected = { selectedFilters ->
                             navController.navigate("${NavRoutes.FILTERS}?${NavArgs.FILTERS}=${selectedFilters.joinToString { it.id }}")
                         },
@@ -116,7 +109,6 @@ fun MainNavHost() {
                 }
                 composable(route = NavRoutes.PLAYER_GRID) {
                     PlayerGridScreen(
-                        navController = navController,
                         onMoreFiltersSelected = { selectedFilters ->
                             navController.navigate("${NavRoutes.FILTERS}?${NavArgs.FILTERS}=${selectedFilters.joinToString { it.id }}")
                         },

@@ -8,6 +8,7 @@ import com.keiferstone.data.model.StatType
 import com.keiferstone.data.repository.OwlPlayerStatsRepository
 import com.keiferstone.owlplayerstats.extension.extractValue
 import com.keiferstone.owlplayerstats.model.Filter
+import com.keiferstone.owlplayerstats.state.PlayerGridState
 import com.keiferstone.owlplayerstats.state.StatLeaderDatum
 import com.keiferstone.owlplayerstats.state.StatListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,26 +22,36 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class StatListViewModel @Inject constructor(repository: OwlPlayerStatsRepository) : ViewModel() {
-    private val selectedFilters = MutableStateFlow(emptyList<Filter>())
+class MainViewModel @Inject constructor(repository: OwlPlayerStatsRepository) : ViewModel() {
+    val selectedFilters = MutableStateFlow(emptyList<Filter>())
 
-    val uiState = combine(repository.allPlayerDetailsResource.flow, selectedFilters) { playerDetails, selectedFilters ->
+    private val filteredPlayerDetails = combine(repository.allPlayerDetailsResource.flow, selectedFilters) { playerDetails, selectedFilters ->
         playerDetails.filter { playerSummary ->
             if (selectedFilters.isEmpty()) true
             else selectedFilters.all { it.checkPlayer(playerSummary) }
         }
     }
-    .map<List<PlayerDetail>, StatListState> { playerDetails ->
-        val data = StatType.allStatTypes().map { statType ->
-            StatLeaderDatum(statType, playerDetails.top5(statType))
+
+    val statListState = filteredPlayerDetails
+        .map<List<PlayerDetail>, StatListState> { playerDetails ->
+            val data = StatType.allStatTypes().map { statType ->
+                StatLeaderDatum(statType, playerDetails.top5(statType))
+            }
+            StatListState.Content(data)
         }
-        StatListState.Content(data)
-    }
-    .catch { emit(StatListState.Error(it.message)) }
-    .stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = StatListState.Loading)
+        .catch { emit(StatListState.Error(it.message)) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = StatListState.Loading)
+
+    val playerGridState = filteredPlayerDetails
+        .map<List<PlayerDetail>, PlayerGridState> { PlayerGridState.Content(it) }
+        .catch { emit(PlayerGridState.Error(it.message)) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = PlayerGridState.Loading)
 
     fun filterData(filters: List<Filter>) {
         selectedFilters.value = filters

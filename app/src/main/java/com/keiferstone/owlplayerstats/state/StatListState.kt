@@ -1,10 +1,8 @@
 package com.keiferstone.owlplayerstats.state
 
-import androidx.annotation.StringRes
+
 import com.keiferstone.data.model.PlayerDetail
-import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.StatType
-import com.keiferstone.data.model.TeamSummary
 
 sealed class StatListState {
     object Loading : StatListState()

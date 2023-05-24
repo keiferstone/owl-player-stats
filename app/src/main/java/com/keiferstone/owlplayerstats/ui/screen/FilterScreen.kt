@@ -27,22 +27,24 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
-import com.keiferstone.owlplayerstats.extension.nameResId
 import com.keiferstone.owlplayerstats.model.Filter
-import com.keiferstone.owlplayerstats.ui.navigation.NavArgs
+import com.keiferstone.owlplayerstats.ui.composable.hiltActivityViewModel
+import com.keiferstone.owlplayerstats.vm.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterScreen(navController: NavController, initialFilters: List<Filter>) {
+fun FilterScreen(
+    navController: NavController,
+    initialFilters: List<Filter>,
+    viewModel: MainViewModel = hiltActivityViewModel()
+) {
     val scrollState = rememberScrollState()
     val filters = remember {
         buildList {
@@ -57,24 +59,21 @@ fun FilterScreen(navController: NavController, initialFilters: List<Filter>) {
     }
     val selectedFilters = remember { mutableStateListOf(*initialFilters.toTypedArray()) }
 
-    fun saveAndPop() {
-        navController
-            .previousBackStackEntry
-            ?.savedStateHandle
-            ?.set(NavArgs.FILTERS, selectedFilters.toList().joinToString { it.id })
+    BackHandler {
+        viewModel.filterData(selectedFilters)
         navController.popBackStack()
     }
 
-    BackHandler { saveAndPop() }
     Column {
         TopAppBar(
-            title = {
-                Text(stringResource(R.string.filters))
-            },
+            title = { Text(stringResource(R.string.filters)) },
             actions = {
                 IconButton(
                     modifier = Modifier.padding(16.dp),
-                    onClick = { saveAndPop() }) {
+                    onClick = {
+                        viewModel.filterData(selectedFilters)
+                        navController.popBackStack()
+                    }) {
                     Icon(
                         imageVector = Icons.Rounded.Check,
                         contentDescription = "Save filters"
@@ -90,7 +89,7 @@ fun FilterScreen(navController: NavController, initialFilters: List<Filter>) {
             Spacer(modifier = Modifier.height(12.dp))
             filters.forEach { filter ->
                 Row(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .toggleable(
