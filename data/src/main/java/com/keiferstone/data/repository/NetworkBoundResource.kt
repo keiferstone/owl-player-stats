@@ -12,21 +12,21 @@ import kotlin.coroutines.CoroutineContext
 
 class NetworkBoundResource<DbDataType, DataType>(
     query: (CoroutineContext) -> Flow<DbDataType?>,
-    private val map: suspend (DbDataType) -> DataType,
+    private val map: suspend CoroutineScope.(DbDataType) -> DataType,
     private val fetch: suspend CoroutineScope.() -> DataType,
     private val persist: suspend (DataType) -> Unit,
     private val shouldFetch: suspend (DbDataType) -> Boolean,
     private val coroutineContext: CoroutineContext = Dispatchers.IO
 ) {
     val flow: Flow<DataType> = query(coroutineContext).map { data -> // Observe the query() Flow
-        if (data == null || shouldFetch(data)) { // Check if local storage needs to be updated
-            withContext(coroutineContext) {
+        withContext(coroutineContext) {
+            if (data == null || shouldFetch(data)) { // Check if local storage needs to be updated
                 fetch().let { // Fetch remote data
                     persist(it) // Persist data
                     it // Emit data
                 }
-            }
-        } else map(data) // Emit Success with data from local storage
+            } else map(data) // Emit Success with data from local storage
+        }
     }
         .flowOn(coroutineContext) // Set dispatcher
         .distinctUntilChanged() // Prevent duplicate emissions

@@ -1,5 +1,6 @@
 package com.keiferstone.data.extension
 
+import android.util.Log
 import com.keiferstone.data.db.Player
 import com.keiferstone.data.db.Summary_ids
 import com.keiferstone.data.db.Team

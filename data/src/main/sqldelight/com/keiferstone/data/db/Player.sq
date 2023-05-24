@@ -6,7 +6,7 @@ CREATE TABLE player (
     number INTEGER NOT NULL,
     role TEXT,
     preferred_slot INTEGER NOT NULL,
-    current_teams TEXT AS List<Long>,
+    current_teams TEXT AS List<kotlin.Long>,
     given_name TEXT NOT NULL,
     family_name TEXT NOT NULL,
     headshot_url TEXT,
@@ -36,7 +36,7 @@ CREATE TABLE player (
     knockback_kills INTEGER,
     deadeye_kills INTEGER,
     overclock_kills INTEGER,
-    team_ids TEXT AS List<Long>,
+    team_ids TEXT AS List<kotlin.Long>,
     last_fetched_at INTEGER
 );
 

@@ -6,28 +6,21 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.keiferstone.data.api.OwlPlayerStatsClient
-import com.keiferstone.data.db.Summary_ids
-import com.keiferstone.data.extension.hasDetails
 import com.keiferstone.data.extension.isStale
 import com.keiferstone.data.extension.toDbRow
 import com.keiferstone.data.extension.toPlayerDetail
 import com.keiferstone.data.extension.toPlayerDetailTeam
-import com.keiferstone.data.extension.toPlayerSummary
 import com.keiferstone.data.extension.toSummaryIds
-import com.keiferstone.data.extension.toTeamSummary
 import com.keiferstone.data.model.AccessToken
 import com.keiferstone.data.model.PlayerDetail
-import com.keiferstone.data.model.Summary
-import com.keiferstone.data.model.SummaryIds
 import com.keiferstone.owlplayerstats.Database
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class OwlPlayerStatsRepository @Inject constructor(
@@ -48,14 +41,14 @@ class OwlPlayerStatsRepository @Inject constructor(
     )
 
     val allPlayerDetailsResource = NetworkBoundResource(
-        query = { dispatcher ->
-            database.playerQueries.selectAll().asFlow().mapToList(dispatcher)
-        },
+        query = { database.playerQueries.selectAll().asFlow().mapToList(it) },
         map = {
-            it.map { player ->
-                player.toPlayerDetail { teamIds ->
-                    database.teamQueries.selectByIds(teamIds).executeAsList().map { team ->
-                        team.toPlayerDetailTeam()
+            database.teamQueries.transactionWithResult {
+                it.map { player ->
+                    player.toPlayerDetail { teamIds ->
+                        database.teamQueries.selectByIds(teamIds).executeAsList().map { team ->
+                            team.toPlayerDetailTeam()
+                        }
                     }
                 }
             }
@@ -80,9 +73,7 @@ class OwlPlayerStatsRepository @Inject constructor(
                 }
             }
         },
-        shouldFetch = {
-            it.any { player -> player.isStale() }
-        }
+        shouldFetch = { it.isEmpty() || it.any { player -> player.isStale() } }
     )
 
     private suspend fun requireAccessToken(): AccessToken {

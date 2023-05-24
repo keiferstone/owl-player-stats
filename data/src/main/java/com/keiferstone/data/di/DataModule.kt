@@ -3,8 +3,6 @@ package com.keiferstone.data.di
 import android.content.Context
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.keiferstone.data.adapter.listOfLongsAdapter
-import com.keiferstone.data.adapter.listOfStringsAdapter
-import com.keiferstone.data.api.SummaryAdapter
 import com.keiferstone.data.db.Player
 import com.keiferstone.data.db.Summary_ids
 import com.keiferstone.data.model.Summary

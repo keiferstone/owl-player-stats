@@ -1,5 +1,6 @@
 package com.keiferstone.data.extension
 
+import android.util.Log
 import com.keiferstone.data.db.Player
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerDetailStats
@@ -11,20 +12,6 @@ fun Player.isStale(ttl: Long = Ttls.ONE_WEEK): Boolean {
     return System.currentTimeMillis().let { currentTime ->
         currentTime - (last_fetched_at ?: currentTime) > ttl
     }
-}
-
-fun Player.toPlayerSummary(): PlayerSummary {
-    return PlayerSummary(
-        id = id,
-        name = name,
-        number = number,
-        role = role,
-        preferredSlot = preferred_slot,
-        currentTeam = current_teams?.firstOrNull(),
-        givenName = given_name,
-        familyName = family_name,
-        headshotUrl = headshot_url
-    )
 }
 
 fun Player.toPlayerDetail(loadTeams: (List<Long>) -> List<PlayerDetailTeam>): PlayerDetail {
