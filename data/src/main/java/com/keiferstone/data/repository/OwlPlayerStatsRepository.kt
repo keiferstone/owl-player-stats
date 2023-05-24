@@ -76,42 +76,31 @@ class OwlPlayerStatsRepository @Inject constructor(
         shouldFetch = { it.isEmpty() || it.any { player -> player.isStale() } }
     )
 
+    fun playerDetailResource(playerId: Long) = NetworkBoundResource(
+        query = { database.playerQueries.selectById(playerId).asFlow().mapToOneOrNull(it) },
+        map = {
+            database.teamQueries.transactionWithResult {
+                it.toPlayerDetail { teamIds ->
+                    database.teamQueries.selectByIds(teamIds).executeAsList().map { team ->
+                        team.toPlayerDetailTeam()
+                    }
+                }
+            }
+        },
+        fetch = {
+            client.owlClient.getPlayer(
+                authorization = requireAccessToken().toBearerString(),
+                playerId = playerId
+            )
+        },
+        persist = { database.playerQueries.insert(it.toDbRow()) },
+        shouldFetch = { it.isStale() }
+    )
+
     private suspend fun requireAccessToken(): AccessToken {
         if (accessToken == null) {
             accessToken = client.oAuthClient.requestAccessToken()
         }
         return accessToken!!
-    }
-
-    suspend fun getPlayerDetail(playerId: Long, forceRefresh: Boolean = false): PlayerDetail = withContext(Dispatchers.IO) {
-        /*
-        var player = if (!forceRefresh) {
-            // Check cache
-            database.playerQueries.selectById(playerId).executeAsOneOrNull()?.let { cachedPlayer ->
-                if (!cachedPlayer.isStale()) cachedPlayer.toPlayerDetail { teamIds ->
-                    database.teamQueries.selectByIds(teamIds).executeAsList().map { cachedTeam ->
-                        cachedTeam.toPlayerDetailTeam()
-                    }
-                }
-                else null
-            }
-        } else null
-
-        player = if (forceRefresh || player == null) {
-            // Fetch from api
-            client.owlClient.getPlayer(
-                authorization = requireAccessToken().toBearerString(),
-                playerId = playerId
-            ).also {
-                database.playerQueries.insert(it.toDbRow())
-            }
-        } else player
-        player
-
-         */
-        client.owlClient.getPlayer(
-            authorization = requireAccessToken().toBearerString(),
-            playerId = playerId
-        )
     }
 }

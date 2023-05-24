@@ -42,7 +42,7 @@ import com.keiferstone.owlplayerstats.vm.PlayerDetailViewModel
 fun PlayerDetailScreen(
     playerId: Long,
     viewModel: PlayerDetailViewModel = hiltViewModel()) {
-    viewModel.loadPlayer(playerId)
+    viewModel.setPlayerId(playerId)
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
         is PlayerDetailState.Loading -> {

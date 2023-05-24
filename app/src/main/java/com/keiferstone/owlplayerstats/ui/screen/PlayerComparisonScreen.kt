@@ -45,7 +45,7 @@ fun PlayerComparisonScreen(
     player1Id: Long,
     player2Id: Long,
     viewModel: PlayerComparisonViewModel = hiltViewModel()) {
-    viewModel.loadPlayers(player1Id, player2Id)
+    viewModel.setPlayerIds(player1Id, player2Id)
 
     when (val uiState = viewModel.uiState.collectAsState().value) {
         is PlayerComparisonState.Loading -> {
@@ -72,8 +72,8 @@ fun PlayerComparisonScreen(
                     .background(
                         brush = Brush.horizontalGradient(
                             0f to player1SecondaryColor,
-                            0.1f to player1SecondaryColor,
-                            0.9f to player2SecondaryColor,
+                            0.2f to player1SecondaryColor,
+                            0.8f to player2SecondaryColor,
                             1f to player2SecondaryColor
                         )
                     )

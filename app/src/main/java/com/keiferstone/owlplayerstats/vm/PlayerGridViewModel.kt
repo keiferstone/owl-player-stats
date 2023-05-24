@@ -1,7 +1,6 @@
 package com.keiferstone.owlplayerstats.vm
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keiferstone.data.model.PlayerDetail
