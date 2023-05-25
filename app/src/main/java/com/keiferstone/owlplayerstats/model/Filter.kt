@@ -1,13 +1,9 @@
 package com.keiferstone.owlplayerstats.model
 
 import android.content.res.Resources
-import androidx.annotation.StringRes
 import com.keiferstone.data.extension.hasStats
 import com.keiferstone.data.model.PlayerDetail
 import com.keiferstone.data.model.PlayerRoles
-import com.keiferstone.data.model.PlayerRoles.DPS
-import com.keiferstone.data.model.PlayerRoles.SUPPORT
-import com.keiferstone.data.model.PlayerRoles.TANK
 import com.keiferstone.data.model.PlayerSummary
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
@@ -20,9 +16,12 @@ sealed class Filter(val id: String) {
 
     open fun toString(resources: Resources) = when(this) {
         OnTeam -> resources.getString(R.string.on_team)
-        PlaysTank -> resources.getString(R.string.tank)
-        PlaysDps -> resources.getString(R.string.dps)
-        PlaysSupport -> resources.getString(R.string.support)
+        is PlaysRole -> when (role) {
+            PlayerRoles.TANK -> resources.getString(R.string.tank)
+            PlayerRoles.DPS -> resources.getString(R.string.dps)
+            PlayerRoles.SUPPORT -> resources.getString(R.string.support)
+            else -> ""
+        }
         HasStats -> resources.getString(R.string.has_stats)
         is HasStat -> resources.getString(R.string.has_stat, resources.getString(statType.nameResId()))
         is TimePlayed -> resources.getString(R.string.time_played_min, seconds / 60)
@@ -33,19 +32,9 @@ sealed class Filter(val id: String) {
         override fun checkPlayer(player: PlayerDetail) = player.currentTeam != null
     }
 
-    object PlaysTank : Filter(TANK) {
-        override fun checkPlayer(player: PlayerSummary) = player.role == PlayerRoles.TANK
-        override fun checkPlayer(player: PlayerDetail) = player.role == PlayerRoles.TANK
-    }
-
-    object PlaysDps : Filter(DPS) {
-        override fun checkPlayer(player: PlayerSummary) = player.role == PlayerRoles.DPS
-        override fun checkPlayer(player: PlayerDetail) = player.role == PlayerRoles.DPS
-    }
-
-    object PlaysSupport : Filter(SUPPORT) {
-        override fun checkPlayer(player: PlayerSummary) = player.role == PlayerRoles.SUPPORT
-        override fun checkPlayer(player: PlayerDetail) = player.role == PlayerRoles.SUPPORT
+    data class PlaysRole(val role: String) : Filter(PLAYS_ROLE + role) {
+        override fun checkPlayer(player: PlayerSummary) = player.role == role
+        override fun checkPlayer(player: PlayerDetail) = player.role == role
     }
 
     object HasStats : Filter(HAS_STATS) {
@@ -65,9 +54,7 @@ sealed class Filter(val id: String) {
 
     companion object {
         const val ON_TEAM = "on-team"
-        const val TANK = "tank"
-        const val DPS = "dps"
-        const val SUPPORT = "support"
+        const val PLAYS_ROLE = "plays-role-"
         const val HAS_STATS = "has-stats"
         const val HAS_STAT = "has-stat-"
         const val TIME_PLAYED = "time-played-"

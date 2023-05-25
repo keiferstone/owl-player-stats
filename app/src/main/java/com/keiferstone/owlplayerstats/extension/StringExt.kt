@@ -1,6 +1,7 @@
 package com.keiferstone.owlplayerstats.extension
 
 
+import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.exception.UnsupportedFilterIdException
 import com.keiferstone.owlplayerstats.model.Filter
@@ -19,9 +20,9 @@ fun String.parseFilter(): Filter {
 
     return when {
         trimmedFilter == Filter.ON_TEAM -> Filter.OnTeam
-        trimmedFilter == Filter.TANK -> Filter.PlaysTank
-        trimmedFilter == Filter.DPS -> Filter.PlaysDps
-        trimmedFilter == Filter.SUPPORT -> Filter.PlaysSupport
+        trimmedFilter == Filter.PLAYS_ROLE + PlayerRoles.TANK -> Filter.PlaysRole(PlayerRoles.TANK)
+        trimmedFilter == Filter.PLAYS_ROLE + PlayerRoles.DPS -> Filter.PlaysRole(PlayerRoles.DPS)
+        trimmedFilter == Filter.PLAYS_ROLE + PlayerRoles.SUPPORT -> Filter.PlaysRole(PlayerRoles.SUPPORT)
         trimmedFilter == Filter.HAS_STATS -> Filter.HasStats
         trimmedFilter.startsWith(Filter.HAS_STAT) -> Filter.HasStat(parseStatType())
         trimmedFilter.startsWith(Filter.TIME_PLAYED) -> Filter.TimePlayed(parseTimePlayed())

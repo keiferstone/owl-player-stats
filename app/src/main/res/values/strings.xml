@@ -43,4 +43,7 @@
     <string name="deadeye_kills">Deadeye kills</string>
     <string name="overclock_kills">Overclock kills</string>
     <string name="filters">Filters</string>
+    <string name="player_status">Player status</string>
+    <string name="player_role">Player role</string>
+    <string name="player_stats">Player stats</string>
 </resources>

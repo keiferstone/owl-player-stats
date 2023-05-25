@@ -30,11 +30,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
 import com.keiferstone.owlplayerstats.extension.extractValue
 import com.keiferstone.owlplayerstats.extension.formatStatValue
 import com.keiferstone.owlplayerstats.extension.nameResId
+import com.keiferstone.owlplayerstats.extension.select
 import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.state.StatDetailState
 import com.keiferstone.owlplayerstats.vm.StatDetailViewModel
@@ -47,9 +49,9 @@ fun StatDetailScreen(
 
     val filters = remember {
         listOf(
-            Filter.PlaysTank,
-            Filter.PlaysDps,
-            Filter.PlaysSupport,
+            Filter.PlaysRole(PlayerRoles.TANK),
+            Filter.PlaysRole(PlayerRoles.DPS),
+            Filter.PlaysRole(PlayerRoles.SUPPORT),
             Filter.HasStat(statType)
         )
     }
@@ -81,8 +83,7 @@ fun StatDetailScreen(
                         FilterChip(
                             selected = selectedFilters.contains(filter),
                             onClick = {
-                                if (selectedFilters.contains(filter)) selectedFilters.remove(filter)
-                                else selectedFilters.add(filter)
+                                selectedFilters.select(filter)
                                 viewModel.filterData(selectedFilters.toList())
                             },
                             label = { Text(filter.toString(LocalContext.current.resources)) },

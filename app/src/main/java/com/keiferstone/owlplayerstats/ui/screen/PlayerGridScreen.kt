@@ -37,7 +37,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.keiferstone.data.model.PlayerDetail
+import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.owlplayerstats.R
+import com.keiferstone.owlplayerstats.extension.select
 import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.ui.component.PlayerItem
 import com.keiferstone.owlplayerstats.state.PlayerGridState
@@ -55,9 +57,9 @@ fun PlayerGridScreen(
     val defaultVisibleFilters = remember {
         listOf(
             Filter.OnTeam,
-            Filter.PlaysTank,
-            Filter.PlaysDps,
-            Filter.PlaysSupport,
+            Filter.PlaysRole(PlayerRoles.TANK),
+            Filter.PlaysRole(PlayerRoles.DPS),
+            Filter.PlaysRole(PlayerRoles.SUPPORT),
             Filter.HasStats
         )
     }
@@ -123,8 +125,7 @@ fun PlayerGridScreen(
                                 selected = selectedFilters.contains(filter),
                                 onClick = {
                                     selectedFilters.toMutableList().let { filters ->
-                                        if (filters.contains(filter)) filters.remove(filter)
-                                        else filters.add(filter)
+                                        filters.select(filter)
                                         viewModel.filterData(filters.toList())
                                     }
                                 },

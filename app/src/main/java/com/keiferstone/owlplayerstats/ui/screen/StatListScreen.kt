@@ -29,8 +29,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.keiferstone.data.model.PlayerRoles
 import com.keiferstone.data.model.StatType
 import com.keiferstone.owlplayerstats.R
+import com.keiferstone.owlplayerstats.extension.select
 import com.keiferstone.owlplayerstats.model.Filter
 import com.keiferstone.owlplayerstats.state.StatListState
 import com.keiferstone.owlplayerstats.ui.component.StatLeadersRow
@@ -45,9 +47,9 @@ fun StatListScreen(
     onStatSelected: (StatType) -> Unit = {}) {
     val defaultVisibleFilters = remember {
         listOf(
-            Filter.PlaysTank,
-            Filter.PlaysDps,
-            Filter.PlaysSupport,
+            Filter.PlaysRole(PlayerRoles.TANK),
+            Filter.PlaysRole(PlayerRoles.DPS),
+            Filter.PlaysRole(PlayerRoles.SUPPORT),
             Filter.TimePlayed(5 * 60)
         )
     }
@@ -104,8 +106,7 @@ fun StatListScreen(
                                     selected = selectedFilters.contains(filter),
                                     onClick = {
                                         selectedFilters.toMutableList().let { filters ->
-                                            if (filters.contains(filter)) filters.remove(filter)
-                                            else filters.add(filter)
+                                            filters.select(filter)
                                             viewModel.filterData(filters.toList())
                                         }
                                     },
