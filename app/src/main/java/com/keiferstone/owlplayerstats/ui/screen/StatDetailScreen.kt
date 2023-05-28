@@ -77,7 +77,7 @@ fun StatDetailScreen(
                     .verticalScroll(scrollState)
             ) {
                 FlowRow(
-                    modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 0.dp)
+                    modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 2.dp)
                 ) {
                     filters.forEach { filter ->
                         FilterChip(

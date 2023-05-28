@@ -118,7 +118,7 @@ fun PlayerGridScreen(
                             })
                     }
                     FlowRow(
-                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 0.dp)
+                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 2.dp)
                     ) {
                         visibleFilters.forEach { filter ->
                             FilterChip(
